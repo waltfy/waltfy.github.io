@@ -1,0 +1,39 @@
+extends layout
+
+block content
+  h2#work Work
+  p Go over some stuff on 
+    a(href='http://www.github.com/waltervascarvalho', target='_blank')
+      i.ion-social-github
+    |. I also have been a/an:
+    ul
+      li
+        | Summer intern at 
+        a(href='http://www.eysys.com', target='_blank') Eysys
+        |.
+      li Swiss army knife at Mototrak.
+    
+  h2#blog Written
+  
+  .blog
+    p
+      h4
+        a(href=latest.post.url) #{latest.post.title}
+      small.date  #{moment(moment(latest.post.date).format('DDMMYYYY'), "DDMMYYYY").fromNow()}
+    != latest.summary
+  each post in posts
+    ul
+      li
+        h4
+          a(href=post.url) #{post.title}
+        small.date  #{moment(moment(post.date).format('DDMMYYYY'), "DDMMYYYY").fromNow()}
+  
+  h2#about About
+  p Computer Science undergraduate. Pursuer of the full-stack hacker title. Absolutely always on 
+    a(href='http://www.twitter.com/waltercfilho', target='_blank')
+      i.ion-social-twitter
+    |  and sometimes on 
+    a(href='mailto:me@waltercarvalho.com')
+      i.ion-ios7-email
+    |.
+  

@@ -1,0 +1,23 @@
+{
+  "name": "waltercarvalho.com",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "3.3.8",
+    "jade": "*",
+    "poet": "*",
+    "moment": "~2.4.0"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-stylus": "~0.11.0",
+    "grunt-contrib-concat": "~0.3.0",
+    "matchdep": "~0.3.0",
+    "grunt-contrib-uglify": "~0.2.7",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-contrib-copy": "~0.4.1"
+  }
+}

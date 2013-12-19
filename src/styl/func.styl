@@ -1,0 +1,28 @@
+support-for-ie ?= true
+
+vendor(thing, value)
+  for vendor in vendors
+    if vendor == official
+      {thing} value
+    else
+      -{vendor}- {thing} value
+
+border-radius()
+  vendor(border-radius, arguments)
+
+transform()
+    vendor(transform, arguments)
+
+transition(what=all, time=200ms, easeing=ease)
+    vendor(transition, what time easeing)
+
+animation()
+    vendor(animation, arguments)
+
+opacity(n)
+  -khtml-opacity n
+  -moz-opacity n
+  opacity n
+  if support-for-ie
+    -ms-filter unquote('"progid:DXImageTransform.Microsoft.Alpha(Opacity=' + round(n * 100) + ')"')
+    filter unquote('alpha(opacity=' + round(n * 100) + ')')

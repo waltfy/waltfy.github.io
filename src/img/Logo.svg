@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="496px" height="496px" viewBox="0 0 496 496" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>Logo</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="svg" sketch:type="MSLayerGroup" transform="translate(-4.000000, -4.000000)">
+            <rect id="Rectangle-1" fill="#373737" sketch:type="MSShapeGroup" transform="translate(252.000000, 252.000000) rotate(-45.000000) translate(-252.000000, -252.000000) " x="74" y="74" width="356" height="356" rx="10"></rect>
+            <path d="M361.451172,251.802734 C354.523274,232.489386 334.854269,221.25 304.500753,221.25 C274.147238,221.25 241.788841,249.727123 244.129519,296.415738 C246.544074,344.577883 286.84961,364.03125 310.603516,364.03125 C334.357422,364.03125 358.601025,349.625355 365,332.15773" id="C" stroke="#F5F5F5" stroke-width="5" stroke-linecap="round" stroke-linejoin="bevel" sketch:type="MSShapeGroup"></path>
+            <g id="W" transform="translate(140.000000, 172.000000)" sketch:type="MSShapeGroup" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M78.1445312,0.4921875 L139.078125,140.332031 L201.65625,0.171875" id="V-Right-Shadow" stroke="#373737" stroke-width="14"></path>
+                <path d="M78.1445312,0.4921875 L139.078125,140.332031 L201.65625,0.171875" id="V-Right" stroke="#F5F5F5" stroke-width="5"></path>
+                <path d="M0.14453125,0.4921875 L61.078125,140.332031 L123.65625,0.171875" id="V-Left" stroke="#373737" stroke-width="9"></path>
+                <path d="M4.14453125,0.4921875 L65.078125,140.332031 L127.65625,0.171875" id="V-Left" stroke="#F5F5F5" stroke-width="5"></path>
+            </g>
+            <path d="M228.804687,124.40625 L275.665378,124.40625" id="Line-Top" stroke="#F5F5F5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

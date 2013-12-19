@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  p
+    a(href='/') Home
+  article
+    small.date #{moment(moment(post.date).format('DDMMYYYY'), "DDMMYYYY").fromNow()}
+      | on #{post.category}
+    h1.title #{post.title}
+    !=post.content

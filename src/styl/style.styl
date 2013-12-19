@@ -1,0 +1,160 @@
+/*! waltercarvalho.com - v0.0.1 - 2013-12-18 */
+@import "../fonts/ionicons/css/ionicons.css"
+
+/* simplest css reset */
+*
+  vendor(box-sizing, border-box)
+  text-rendering optimizeLegibility
+  -webkit-font-smoothing: antialiased;
+html
+  font-size 100%
+  -webkit-text-size-adjust 100%
+  -ms-text-size-adjust 100%
+html, body, ul, ol, li, form, fieldset, legend
+  margin 0
+  padding 0
+p, ol, ul
+  margin 1.6em 0
+fieldset, img
+  border 0
+legend
+  color #000
+small
+  font-size .8em
+  font-weight 400
+ul, ol
+  margin-left 2*0.625em
+li
+  margin-bottom .625em
+sup
+  vertical-align text-top
+sub
+  vertical-align text-bottom
+table
+  border-collapse collapse
+  border-spacing 0
+caption, th, td
+  text-align left
+  vertical-align top
+  font-weight normal
+input, textarea, select
+  font-size 110%
+  line-height 1.1
+abbr, acronym
+  border-bottom .1em dotted
+  cursor help
+
+/* color */
+$bg = hsl(0, 0%, 27%)
+$bg_light = hsl(0, 0%, 96%)
+$detail = hsl(0, 100%, 67%);
+$ink = hsl(0, 0%, 24%)
+$ink_light = hsl(0, 0%, 98%)
+$twitter = hsl(210, 82%, 67%)
+$love = hsl(0, 84%, 58%)
+
+/* type */
+$sans = 'Open Sans'
+$cons = 'Droid Serif'
+
+h1, h2, h3, h4, h5, h6
+  margin 0
+  font-family $sans
+  font-weight 700
+  line-height 1
+  display inline-block
+
+p
+  font-family $cons
+  font-weight 400
+  line-height 1.6
+
+a
+  text-decoration none
+  color inherit
+  border-bottom 1px dotted $detail
+  font-weight bold
+  color $detail
+
+/* general */  
+body
+  font-size 1em
+  font-family $cons, $sans, helvetica, arial, sans-serif
+  background $bg
+  border-top .3125em $detail solid
+  color $ink
+
+header
+  padding 5*0.625em
+  background url('../img/Logo.svg') center 0.625em no-repeat $bg_light
+  background-size 5em;
+  h1
+    margin 0
+
+.wrap
+  background $bg_light
+  padding 2*.625em
+
+.blog
+  margin 2*.625em 0 0 2*.625em
+  padding 0 0 0 2*.625em
+  border-left 2px solid lighten($bg, 70%)
+  .date
+    display inline
+    color lighten($bg, 34%)
+
+article
+  .date
+    color lighten($bg, 34%)
+    display block
+  .title
+    display block
+    font-size 2.5em
+    margin .3125em 0 .625em
+
+blockquote
+  padding 2*.625em 0 2*.625em 2*.625em
+  margin-left .625em
+  border-left 2px solid lighten($bg, 70%)
+  font-size 1.4em
+  color lighten($ink, 20%)
+  strong
+    font-size 0.8em
+
+footer
+  padding 2*.625em
+  text-align center
+  border-top .8em darken($bg, 20%) solid
+  color $ink_light
+  small
+    color darken($bg, 50%)
+
+/* extras */
+.hide
+  display none
+
+.ion-social-twitter
+  color $twitter
+
+.ion-ios7-heart
+  color $love
+
+.profile_pic 
+  margin 0 auto
+  background url('http://www.gravatar.com/avatar/015739d093af8eecd6f6d6ecfd89798b.png') no-repeat center center
+  display block
+  width 3em
+  height 3em
+  margin-bottom .625em
+  border .5em solid lighten($bg, 10%)
+  border-radius (3.125em)
+
+/* media queries mobile first */
+@media all and (min-width: 45.5em)
+  body
+    font-size 1.1em
+  ul, ol
+    margin-left 4*0.625em
+  .content
+    margin 0 auto
+    max-width 40em
