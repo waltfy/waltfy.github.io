@@ -48,12 +48,12 @@ poet.addRoute('/written/:post', function (req, res, nxt) {
 });
 
 http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+  console.log('waltercarvalho.com running on port ' + app.get('port'));
 });
 
+/* This function produces a summary of a post's content, alongside a link to the full story. */
 var getSummary = function (post) {
   var summary = new String(post.content);
-  summary = summary.substr(0, 250) + '... <a href=\'' + post.url + '\'> more <i class=\'ion-arrow-right-c\'></i>';
-  return summary;
+  return summary.substr(0, 300) + '... <a href=\'' + post.url + '\'> more <i class=\'ion-arrow-right-c\'></i>';
 }
 

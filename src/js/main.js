@@ -1,6 +1,6 @@
 (function () {
 
-  console.debug('Hi! You can find the source code for this website @ http://www.github.com/waltervascarvalho');
+  console.debug('Hi! You can find the source code for this website @ http://www.github.com/waltervascarvalho/personal');
 
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

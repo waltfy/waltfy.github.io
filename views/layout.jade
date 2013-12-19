@@ -1,3 +1,4 @@
+-devMode = false
 doctype 5
 html
   head
@@ -7,6 +8,7 @@ html
     meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1')
     link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic|Open+Sans:700,400')
     link(rel='stylesheet', href='/styles/style.css')
+    link(rel="icon", href="/img/favicon.ico")
   body
     header
       h1.hide Walter Carvalho
@@ -24,6 +26,9 @@ html
         i.ion-ios7-heart &nbsp;
         | by walter.
 
-  script(src='http://192.168.1.71:35729/livereload.js')
-  script(type='text/javascript', src='/scripts/scripts.js')
+  if (devMode)
+    script(src='http://192.168.1.71:35729/livereload.js')
+    script(type='text/javascript', src='/scripts/scripts.js')
+  else
+    script(type='text/javascript', src='/scripts/scripts.min.js')
     

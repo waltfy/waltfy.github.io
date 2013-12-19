@@ -26,8 +26,8 @@ module.exports = function (grunt) {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
       scripts: {
-        src: 'dist/js/scripts.js',
-        dest: 'dist/js/scripts.min.js'
+        src: 'dist/scripts/scripts.js',
+        dest: 'dist/scripts/scripts.min.js'
       }
     },
     stylus: {
@@ -81,6 +81,6 @@ module.exports = function (grunt) {
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
   /* Default task(s) */
-  grunt.registerTask('default', ['copy', 'concat', 'stylus', 'watch']);
+  grunt.registerTask('default', ['copy', 'concat', 'stylus', 'uglify']);
 
 };
