@@ -23,6 +23,7 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'dist')));
 
+app.locals.env = app.get('env');
 app.locals.moment = require('moment');
 
 // development only
