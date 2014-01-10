@@ -1,6 +1,6 @@
 {{{
   "title" : "Gas Like",
-  "category" : "blogging",
+  "category" : "Blogging",
   "date" : "08-25-2012"
 }}}
 

@@ -5,6 +5,6 @@ block content
     a(href='/') Home
   article
     small.date #{moment(moment(post.date).format('DDMMYYYY'), "DDMMYYYY").fromNow()}
-      | on #{post.category}
+      | on #{ post.category.split(" ").join(", ") }
     h1.title #{post.title}
     !=post.content

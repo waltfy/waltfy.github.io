@@ -1,6 +1,6 @@
 {{{
   "title" : "Strap Your Boots",
-  "category" : "blogging",
+  "category" : "Blogging",
   "date" : "8-12-2013"
 }}}
 
