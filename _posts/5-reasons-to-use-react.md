@@ -1,5 +1,5 @@
 {{{
-  "title" : "My Case for React",
+  "title" : "5 Reasons to Use React",
   "category" : "Blogging Javascript",
   "date" : "1-10-2014"
 }}}
