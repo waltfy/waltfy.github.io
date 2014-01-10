@@ -1,7 +1,7 @@
 {{{
   "title" : "My Case for React",
   "category" : "Blogging Javascript",
-  "date" : "1-6-2014"
+  "date" : "1-10-2014"
 }}}
 
 `React` is Facebook & Instagram's child, a framework that can be, [and has been](http://www.youtube.com/watch?v=XxVg_s8xAms), referred to as "just the view" on the MVC. In this post I will provide a list of reasons as to why React can do for me what EmberJS | Angular | Backbone can't or won't do.
