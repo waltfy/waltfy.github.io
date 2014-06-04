@@ -2,14 +2,14 @@ extends layout
 
 block content
   h2#work Work
-  p I'm actively looking for a full-time position in London, here's 
-    a(href='http://f.cl.ly/items/1F3w181A1p2b2L44293F/WalterCarvalho.pdf') my cv.
-  p Ex:
+  p Currently a junior dev at 
+    a(href='http://gitter.im') Gitter
+    |.
     ul
-      li Front-End Engineer Intern, 
+      li Ex Front-End Engineer Intern, 
           a(href='http://www.eysys.com', target='_blank') Eysys
           |.
-      li Full-stack (part-time) Hacker, Mototrak.
+      li Part-time Full-stack Hacker, Mototrak.
   p Check out my 
     a(href='http://www.github.com/waltervascarvalho', target='_blank')
       i.ion-social-github
@@ -31,11 +31,8 @@ block content
         small.date  #{moment(moment(post.date).format('DDMMYYYY'), "DDMMYYYY").fromNow()}
   
   h2#about About
-  p Computer Science undergraduate. Pursuer of the full-stack hacker title. Absolutely always on 
-    a(href='http://www.twitter.com/waltercfilho', target='_blank')
+  p Computer Science graduate. Pursuer of the full-stack hacker title. You can say hello to me 
+    a(href='http://www.twitter.com/waltfy', target='_blank' class='twitter')
+      @waltfy 
       i.ion-social-twitter
-    |  and sometimes on 
-    a(href='mailto:me@waltercarvalho.com')
-      i.ion-ios7-email
-    |.
-  
+      

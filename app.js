@@ -36,7 +36,7 @@ app.get('/', function (req, res, nxt) {
       latest = posts.shift(),
       summary = getSummary(latest);
 
-  res.render('index', {posts: posts, title: 'Home', latest: { post: latest, summary: summary } })
+  res.render('index', {posts: posts, title: '@waltfy', latest: { post: latest, summary: summary } })
 });
 
 poet.addRoute('/written/:post', function (req, res, nxt) {
