@@ -5,6 +5,7 @@
   vendor(box-sizing, border-box)
   text-rendering optimizeLegibility
   -webkit-font-smoothing: antialiased;
+
 html
   font-size 100%
   -webkit-text-size-adjust 100%
@@ -84,15 +85,16 @@ body
   color $ink
 
 header
-  padding 5*0.625em
-  background url('../img/Logo.svg') center 0.625em no-repeat $bg_light
+  padding 6*0.625em
+  background url('../img/Logo.svg') 0.625em no-repeat $bg_light
+  background-position center center
   background-size 5em;
   h1
     margin 0
 
 .wrap
   background $bg_light
-  padding 2*.625em
+  padding 0 2*.625em 2*.625em 2*.625em
 
 .blog
   margin 2*.625em 0 0 2*.625em
