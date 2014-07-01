@@ -78,6 +78,6 @@ if (app.locals.env !== 'development') {
         sys.puts(stdout);
       }
 
-      exec("cd ~/personal/ && ./deploy.sh", puts);
+      exec("./deploy", puts);
     });  
 }
