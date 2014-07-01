@@ -41,7 +41,6 @@ app.get('/', function (req, res, nxt) {
   var posts = poet.helpers.getPosts(0, 5),
       latest = posts.shift(),
       summary = getSummary(latest);
-
   res.render('index', {
     posts: posts,
     title: '@waltfy',
@@ -72,6 +71,7 @@ http.createServer(app).listen(app.get('port'), function(){
 if (app.locals.env !== 'development') {
   gith({repo: 'waltervascarvalho/personal'})
     .on( 'all', function (payload) {
+      //console.log(payload);
       var sys = require('sys')
       var exec = require('child_process').exec;
       function puts (error, stdout, stderr) { 
