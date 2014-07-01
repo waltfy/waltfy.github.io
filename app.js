@@ -77,6 +77,6 @@ if (app.locals.env !== 'development') {
       function puts (error, stdout, stderr) { 
         sys.puts(stdout);
       }
-      exec(". /deploy-develop.sh", puts);
+      exec("./deploy.sh", puts);
     });  
 }
