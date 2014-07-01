@@ -1,4 +1,4 @@
-/*! waltercarvalho.com - v0.0.1 - 2014-06-05 */
+/*! waltercarvalho.com - v0.0.1 - 2014-07-01 */
 @import "../fonts/ionicons/css/ionicons.css"
 
 /* simplest css reset */
@@ -66,6 +66,8 @@ h1, h2, h3, h4, h5, h6
   display inline-block
 
 p
+  &:first-child
+    margin-top 0
   font-family $cons
   font-weight 400
   line-height 1.6
@@ -148,7 +150,7 @@ footer
   border-top .8em darken($bg, 20%) solid
   color $ink_light
   small
-    color darken($bg, 50%)
+    color lighten($bg, 60%)
 
 /* extras */
 .hide

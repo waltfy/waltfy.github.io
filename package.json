@@ -7,9 +7,10 @@
   },
   "dependencies": {
     "express": "3.3.8",
+    "gith": "^1.0.4",
     "jade": "*",
-    "poet": "*",
-    "moment": "~2.4.0"
+    "moment": "~2.4.0",
+    "poet": "*"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
