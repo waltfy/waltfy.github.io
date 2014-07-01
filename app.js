@@ -71,12 +71,13 @@ http.createServer(app).listen(app.get('port'), function(){
 if (app.locals.env !== 'development') {
   gith({repo: 'waltervascarvalho/personal'})
     .on( 'all', function (payload) {
-      //console.log(payload);
-      var sys = require('sys')
+      var sys = require('sys');
       var exec = require('child_process').exec;
+
       function puts (error, stdout, stderr) { 
         sys.puts(stdout);
       }
-      exec("./deploy.sh", puts);
+
+      exec(". ~/personal/deploy.sh", puts);
     });  
 }
