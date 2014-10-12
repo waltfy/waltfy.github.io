@@ -1,4 +1,2 @@
-dist
-node_modules
-deployment_log.txt
-forever.log
+_site
+.sass-cache
