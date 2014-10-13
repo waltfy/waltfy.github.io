@@ -1,13 +1,13 @@
 ---
-  "title" : "6 Reasons to Use React",
-  "category" : "Blogging Javascript",
-  "date" : "1-10-2014"
+  layout: post
+  author: 'Walter'
+  title: "6 Reasons to Use React"
 ---
 
 `React` is Facebook & Instagram's child, a framework that can be, [and has been](http://www.youtube.com/watch?v=XxVg_s8xAms), referred to as "just the view" on the MVC. In this post I will provide a list of reasons as to why React can do for me what `Ember | Angular | Backbone` can't or won't do.
 
 > "A Javascript Library for building user interfaces."
-
+>
 > __The React Team__
 
 ## YES!
@@ -37,11 +37,11 @@ This is actually a great way to allocate a role for each module. This allows us 
 <a href="http://cl.ly/image/0q2j20352G3L" target="_blank">Compared to other frameworks</a> and weighing in at 26.8 KB ([CDNJS](http://cdnjs.com/#react)), I consider React small, although it does so much (all of the ‘Virtual DOM’ heavy stuff). I will let [this video show you](http://www.youtube.com/watch?feature=player_embedded&v=1OeXsL5mr4g) what I can’t explain with just words. Honestly, it’s pretty impressive.
 
 ## 6. Plays nice with others
-For myself, this one isn’t so much of a big reason to use React, but for you reading this thinking about giving it a go it’s worth mentioning that React doesn’t really care about the rest of your tech stack. It will play nice, even with the other frameworks mentioned above. Sure, most of them wouldn’t make much sense to add React on top, but from what I have been stumbling across on the web, Backbone in particular, goes nicely with React.
+To me personally, this one isn’t so much of a big reason to use React, but for you reading this and thinking about giving it a go it’s worth mentioning that React doesn’t really care about the rest of your tech stack. It will play nice, even with the other frameworks mentioned above. Sure, most of them wouldn’t make much sense to add React on top, but from what I have been stumbling across on the web, Backbone in particular, goes nicely with React.
 
 ## Conclusion
 I’m not sure whether it was a design choice or if it happened by chance, but the fact that it marries perfectly with progressive enhancement quite simply: does it for me. On top of that it does all this cool stuff with the ‘Virtual DOM’ and smart updates, the JSX, its size and its plug-’n-play nature makes React jump to the top of my list of Javascript Frameworks. I got a feeling that 2014 will be a big year for it too. So give React a shot, [watch this intro](http://www.youtube.com/watch?feature=player_embedded&v=XxVg_s8xAms) and let me know what you build with React & any of your thoughts on [twitter](http://www.twitter.com/waltfy).
 
 ### References
-- [React | A JavaScript library for building user interfaces.](http://facebook.github.io/react/)
+- [React](http://facebook.github.io/react/)
 - [Versus.com](http://versus.com/en/ember-js-vs-react)

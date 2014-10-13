@@ -1,7 +1,7 @@
 ---
-  "title" : "Strap Your Boots",
-  "category" : "Blogging",
-  "date" : "8-12-2013"
+  layout: post
+  author: 'Walter'
+  title: "Strap Your Boots"
 ---
 
 ## 10 Things Computer Science freshmen should know before the first day of class.
