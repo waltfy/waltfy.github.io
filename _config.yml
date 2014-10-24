@@ -1,5 +1,5 @@
 # Site settings
-title: waltfy
+title: W A L T F Y
 highlighter: pygments
 email: waltervascarvalho@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
@@ -9,6 +9,6 @@ description: > # this means to ignore newlines until "baseurl:"
 url: "http://waltfy.net" # the base hostname & protocol for your site
 twitter_username: waltfy
 github_username:  waltfy
-
+assets: /assets
 # Build settings
 markdown: kramdown
