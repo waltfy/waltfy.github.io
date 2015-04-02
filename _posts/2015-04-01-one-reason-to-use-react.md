@@ -19,11 +19,11 @@ Come again?
 
 `Data -> { Your APP } -> Interface`
 
-Which means that your app can be reasoned about as nothing more than a function that has data as input, and a Graphical User Interface (in the form a DOM tree) as output.
+Which means that your app can be reasoned about as nothing more than a function that has data as input, and a Graphical User Interface (in the form of a DOM tree) as output.
 
 `x -> f(x) -> y`
 
-If your app is imagined say – as a function – then if your input is always the same, your result will always be the same also e.g. `var double = a => a * 2;`. This is **almost exactly** the conditions that React **forces** one to operate under, without one even realising the goodness behind it. "So what's my input?" – you ask? State. State as in **data**, is your input. Your function? Your render method's body, the template<sup>**2**</sup> (or how to display your data). Your output? Like in all web applications a DOM tree! What happens whenever something changes? The function is called again with a different input. i.e. State has changed. Render my stuff again please?
+If your app is imagined say – as a function – then if your input is always the same, your result will always be the same also e.g. `var double = a => a * 2;`. This is **almost exactly** the conditions that React **forces** one to operate under, without one even realising the goodness behind it. "So what's my input?" – you ask? State. State as in **data**, is your input. Your function? Your root component render method, and effectively the template<sup>**2**</sup> (or how one displays state). Your output? Like in all web applications a DOM tree! What happens whenever something changes? The function is called again with a different input. i.e. State has changed. Render my stuff again please?
 
 So React can be seen as the "function", that operates on your data (state) and produces an output (DOM). And it's damn good at being just that.
 
