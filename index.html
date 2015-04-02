@@ -2,7 +2,7 @@
 layout: default
 ---
 <div>
-  <h1>Written</h1>
+  <h1>Thoughts</h1>
   <ul class='posts'>
     {% for post in site.posts %}
       <li><a href='{{ post.url | prepend: site.baseurl }}'><strong>{{ post.title }}</strong>, <span>{{ post.date | date: "%b %-d, %Y" }}</span></a></li>
