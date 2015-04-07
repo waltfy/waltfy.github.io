@@ -31,7 +31,7 @@ function compose(/* [function] [, function...] */) {
 }
 {% endhighlight %}
 
-Cool. So, we now have all the functions that we need in one iterable object. Note the `.reverse()` call at the end here, this refers to the "from left to right"<sup>1</sup> note. Moving on. We now need to get the arguments to the resulting function, and stick in an array too. You'll see why later. `compose()` returns **one function**, therefore it returns **one result**. For that reason we will also iterate over the array via a `Array.reduce()`, meaning that we're folding on a result everytime.
+So, we now have all the functions that we need in one iterable object. Note the `.reverse()` call at the end here, this refers to the "from left to right"<sup>1</sup> note. Moving on. We now need to get the arguments to the resulting function, and stick in an array too. You'll see why later. `compose()` returns **one function**, therefore it returns **one result**. For that reason we will also iterate over the array via a `Array.reduce()`, meaning that we're folding on a result everytime.
 
 {% highlight js %}
 function compose(/* [function] [, function...] */) {
