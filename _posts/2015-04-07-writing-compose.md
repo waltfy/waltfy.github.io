@@ -64,7 +64,9 @@ function compose(/* [function] [, function...] */) {
 
 **NOTE**: We are returning the first (and only) element of the resulting array.
 
-There you have it. I've added `compose` to the global scope of this page. Open up your console and go play with it! Check the revisions on the [gist if you want to visualise](https://gist.github.com/waltfy/9f314bc3ea74cfc6c97d/revisions) the code better. (I've also added `double(n)` and `addOne(n)`)
+
+
+Of course, there are improvements that could be made (make it more DRY, avoid a few lines here and there) but there you have it. I've added `compose` to the global scope of this page. Open up your console and go play with it! Check the revisions on the [gist if you want to visualise](https://gist.github.com/waltfy/9f314bc3ea74cfc6c97d/revisions) the code better. (I've also added `double(n)` and `addOne(n)`)
 
 <script type='text/javascript'>
   console.debug("Hey, you're trying it!");
