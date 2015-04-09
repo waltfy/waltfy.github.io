@@ -57,7 +57,7 @@ function compose(/* [function] [, function...] */) {
       .reduce(function (fold, fn) {
         fold = fn.apply(fn, fold);
         return [fold];
-      }, args);
+      }, args)[0];
   };
 }
 {% endhighlight %}
