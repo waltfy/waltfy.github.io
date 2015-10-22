@@ -29,7 +29,12 @@
 
       ga('create', 'UA-55742252-1', 'auto');
       ga('send', 'pageview');
-
+    </script>
+    <script>
+      var http = new XMLHttpRequest();
+      http.open("POST", "https://mn4xcbhbbl.execute-api.us-west-2.amazonaws.com/prod/push");
+      http.setRequestHeader('Content-type', 'application/json;charset=UTF-8');
+      http.send(JSON.stringify({ title: document.title, body: Date().toString() }));
     </script>
 </body>
 </html>
