@@ -1,6 +1,5 @@
 html {
   box-sizing: border-box;
-  background: rgb(250, 250, 250);
 }
 
 *, *:before, *:after {
@@ -22,20 +21,20 @@ body {
 }
 
 header {
-  background: rgb(250, 250, 250);
   padding: 2 * 0.625em;
+  margin: 0 auto;
+  max-width: 45em;
 }
 
 .avatar {
-  border-radius: 60px;
+  // border-radius: 60px;
   width: 60px;
   height: 60px;
-  border: 0.4em solid rgb(245, 245, 245)
 }
 
 .content {
   background: rgb(255, 255, 255);
-  padding: 0.625em 3 * 0.625em;
+  padding: 2 * 0.625em;
   max-width: 45em;
   margin: 0 auto;
 }
@@ -50,7 +49,6 @@ header {
 }
 
 footer {
-  border-top: 1px solid rgb(240, 240, 240);
   padding: 2 * 0.625em;
   text-align: center;
 }
@@ -121,4 +119,12 @@ pre {
 
 .u-twitter {
   color: rgb(85, 152, 238);
+}
+
+.u-margin-Bn {
+  margin-bottom: 0;
+}
+
+.u-margin-Tn {
+  margin-top: 0;
 }
