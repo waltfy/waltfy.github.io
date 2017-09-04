@@ -1,13 +1,23 @@
 ---
 layout: default
 ---
+<header>
+    <h2 class="u-margin-Tn">Walter Carvalho</h2>
+    <p>Software Engineer at <a href="https://gocardless.com" target="_blank" rel="noopener noreferrer">GoCardless</a>, previously at <a href="https://gitter.im/" target="_blank" rel="noopener noreferrer">Gitter</a>.</p>
+    <h3>Links</h3>
+    <ul>
+        <li><a target="_blank" rel="noopener noreferrer" href="https://twitter.com/{{ site.twitter_username }}">Twitter (@waltfy)</a></li>
+        <li><a target="_blank" rel="noopener noreferrer" href="https://github.com/{{ site.github_username }}">GitHub (waltfy)</a></li>
+        <li><a target="_blank" rel="noopener noreferrer" href="https://docs.google.com/document/d/16eCguFQuCkq0dHZSEnIxQAR-o5u7wAFNeoLbCRQx9H4/pub">About</a></li>
+    </ul>
+</header>
 <div>
-    <h3>Thoughts ✍️</h3>
-    <ul class="posts">
+    <h3>Archive</h3>
+    <ul>
         {% for post in site.posts %}
             <li>
                 <a href="{{ post.url | prepend: site.baseurl }}">
-                    <small>{{ post.date | date: "%b %-d, %Y" }}</small> - <strong>{{ post.title }}</strong>
+                    {{ post.title }} (<small>{{ post.date | date: "%b %-d, %Y" }}</small>)
                 </a>
             </li>
         {% endfor %}

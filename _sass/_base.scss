@@ -6,45 +6,21 @@ html {
   box-sizing: inherit;
 }
 
-strong {
-  font-weight: 700;
-}
-
 body {
-  margin: 0;
-  padding: 0;
-  color: rgb(50, 50, 50);
-  font-size: 18px;
-  font-family: 'Tinos', Georgia, serif;
+  margin: 10px;
+  padding: 0px;
+  color: #111;
+  font-size: 17px;
   text-rendering: optimizelegibility;
   -webkit-font-smoothing: antialiased;
+  line-height: 1.8;
 }
 
-header {
-  padding: 2 * 0.625em;
-  margin: 0 auto;
-  max-width: 45em;
-}
-
-.avatar {
-  width: 60px;
-  height: 60px;
-}
 
 .content {
   background: rgb(255, 255, 255);
   padding: 2 * 0.625em;
   max-width: 45em;
-  margin: 0 auto;
-}
-
-.posts {
-  list-style: none;
-  padding: 0;
-}
-
-.posts li {
-  margin-bottom: 0.375em;
 }
 
 footer {
@@ -59,7 +35,6 @@ footer p {
 
 // type
 h1, h2, h3, h4, h5 {
-  font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
   font-weight: normal;
   margin: 0.625em 0;
 }
@@ -67,15 +42,10 @@ h1, h2, h3, h4, h5 {
 h1 { font-size: 2em; }
 h2 { font-size: 1.6em; }
 
-p {
-  line-height: 1.5;
-}
-
 a, a:visited {
   opacity: 0.8;
-  color: inherit;
   text-decoration: none;
-  border-bottom: 1px solid;
+  border-bottom: 1px dotted;
 }
 
 a:hover {
@@ -114,10 +84,6 @@ pre {
 
 .u-justify {
   text-align: justify;
-}
-
-.u-twitter {
-  color: rgb(85, 152, 238);
 }
 
 .u-margin-Bn {
