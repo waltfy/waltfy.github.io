@@ -9,9 +9,9 @@ html {
 body {
   margin: 10px;
   padding: 0px;
-  color: #111;
-  font-size: 17px;
-  font-family: helvetica, sans-serif;
+  color: #333333;
+  font-size: 1.2em;
+  font-family: 'Fira Sans', helvetica, sans-serif;
   text-rendering: optimizelegibility;
   -webkit-font-smoothing: antialiased;
   line-height: 1.8;
@@ -44,13 +44,15 @@ h1 { font-size: 2em; }
 h2 { font-size: 1.6em; }
 
 a, a:visited {
-  opacity: 0.8;
+  color: white;
   text-decoration: none;
-  border-bottom: 1px dotted;
+  background: #aaaaaa;
+  padding: 4px 8px;
+  margin: 8px 2px;
 }
 
-a:hover {
-  opacity: 1;
+ul {
+  list-style: none;
 }
 
 blockquote {
@@ -78,7 +80,6 @@ pre {
   padding: 0 1em;
 }
 
-// uniques
 .u-center {
   text-align: center;
 }
