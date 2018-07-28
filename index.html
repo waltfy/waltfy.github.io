@@ -2,14 +2,12 @@
 layout: default
 ---
 <header>
-    <h1 class="u-margin-Tn">Walter Carvalho</h1>
-    <blockquote>
-        <p>Software Engineer at <a href="https://gocardless.com" target="_blank" rel="noopener noreferrer">GoCardless</a>, previously at <a href="https://gitter.im/" target="_blank" rel="noopener noreferrer">Gitter</a>.</p>
-    </blockquote>
+    <h1>Walter Carvalho, Software Engineer</h1>
     <h3>Links</h3>
     <ul>
-        <li><a target="_blank" rel="noopener noreferrer" href="https://twitter.com/{{ site.twitter_username }}">Twitter (@waltfy)</a></li>
-        <li><a target="_blank" rel="noopener noreferrer" href="https://github.com/{{ site.github_username }}">GitHub (waltfy)</a></li>
+        <li><a target="_blank" rel="noopener noreferrer" href="https://twitter.com/{{ site.twitter_username }}">Twitter</a></li>
+        <li><a target="_blank" rel="noopener noreferrer" href="https://github.com/{{ site.github_username }}">GitHub</a></li>
+        <li><a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/carvalhowalter/">LinkedIn</a></li>
         <li><a target="_blank" rel="noopener noreferrer" href="https://docs.google.com/document/d/16eCguFQuCkq0dHZSEnIxQAR-o5u7wAFNeoLbCRQx9H4/pub">About</a></li>
     </ul>
 </header>
@@ -19,7 +17,7 @@ layout: default
         {% for post in site.posts %}
             <li>
                 <a href="{{ post.url | prepend: site.baseurl }}">
-                    {{ post.title }} (<small>{{ post.date | date: "%b %-d, %Y" }}</small>)
+                    {{ post.title }} {{ post.date | date: "%b %-d, %Y" }}
                 </a>
             </li>
         {% endfor %}
