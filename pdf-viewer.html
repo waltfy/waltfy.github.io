@@ -75,13 +75,17 @@
             color: #555;
         }
 
-        #clear-history {
+        .sidebar-action {
             font-size: 11px;
             color: #999;
             cursor: pointer;
             background: none;
             border: none;
             padding: 2px 6px;
+        }
+
+        .sidebar-action:hover {
+            color: #333;
         }
 
         #clear-history:hover {
@@ -215,7 +219,10 @@
     <div id="sidebar">
         <div id="sidebar-header">
             <h3>History</h3>
-            <button id="clear-history" title="Clear all history">Clear all</button>
+            <span>
+                <button id="download-all" class="sidebar-action" title="Download all PDFs">Download all</button>
+                <button id="clear-history" class="sidebar-action" title="Clear all history">Clear all</button>
+            </span>
         </div>
         <input type="text" id="search-input" placeholder="Search files...">
         <ul id="history-list"></ul>
@@ -234,6 +241,7 @@
         const toggleBtn = document.getElementById('toggle-history');
         const historyList = document.getElementById('history-list');
         const clearBtn = document.getElementById('clear-history');
+        const downloadAllBtn = document.getElementById('download-all');
         const searchInput = document.getElementById('search-input');
 
         let pdfDoc = null;
@@ -369,6 +377,29 @@
             grid.innerHTML = '';
             searchInput.value = '';
             renderHistory();
+        });
+
+        // --- Download all ---
+        downloadAllBtn.addEventListener('click', async () => {
+            const files = await getAllFiles();
+            if (files.length === 0) return;
+
+            for (const file of files) {
+                const blob = new Blob([file.data], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = file.name;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                // Small delay between downloads so the browser doesn't block them
+                if (files.length > 1) {
+                    await new Promise(r => setTimeout(r, 300));
+                }
+            }
         });
 
         // --- Search ---
