@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Horizontal PDF Viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            background: #f0f0f0;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        #controls {
+            padding: 10px;
+            background: white;
+            border-bottom: 1px solid #ccc;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+
+        #pdf-wrapper {
+            position: absolute;
+            top: 60px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            padding: 20px;
+        }
+
+        canvas {
+            display: inline-block;
+            margin-right: 20px;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="controls">
+        <input type="file" id="file-input" accept="application/pdf">
+        Zoom:
+        <input type="range" id="zoom" min="0.5" max="3" step="0.1" value="1">
+    </div>
+
+    <div id="pdf-wrapper"></div>
+
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const wrapper = document.getElementById('pdf-wrapper');
+        const zoomSlider = document.getElementById('zoom');
+
+        let pdfDoc = null;
+        let currentZoom = 1;
+
+        pdfjsLib.GlobalWorkerOptions.workerSrc =
+            'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        fileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async function () {
+                const typedarray = new Uint8Array(this.result);
+                pdfDoc = await pdfjsLib.getDocument(typedarray).promise;
+                renderAllPages();
+            };
+            reader.readAsArrayBuffer(file);
+        });
+
+        zoomSlider.addEventListener('input', () => {
+            currentZoom = parseFloat(zoomSlider.value);
+            if (pdfDoc) renderAllPages();
+        });
+
+        async function renderAllPages() {
+            wrapper.innerHTML = '';
+
+            for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
+                const page = await pdfDoc.getPage(pageNum);
+                const viewport = page.getViewport({scale: currentZoom});
+
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+
+                await page.render({
+                    canvasContext: context,
+                    viewport: viewport
+                }).promise;
+
+                wrapper.appendChild(canvas);
+            }
+        }
+    </script>
+
+</body>
+
+</html>
