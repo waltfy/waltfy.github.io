@@ -21,23 +21,182 @@
             width: 100%;
             top: 0;
             z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-sizing: border-box;
+        }
+
+        #toggle-history {
+            background: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 4px 10px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        #toggle-history:hover {
+            background: #eee;
+        }
+
+        #sidebar {
+            position: fixed;
+            top: 45px;
+            left: 0;
+            bottom: 0;
+            width: 280px;
+            background: white;
+            border-right: 1px solid #ccc;
+            z-index: 99;
+            overflow-y: auto;
+            transform: translateX(-100%);
+            transition: transform 0.2s ease;
+            padding: 12px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #sidebar.open {
+            transform: translateX(0);
+        }
+
+        #sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        #sidebar-header h3 {
+            margin: 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        #clear-history {
+            font-size: 11px;
+            color: #999;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 2px 6px;
+        }
+
+        #clear-history:hover {
+            color: #e00;
+        }
+
+        #search-input {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+            box-sizing: border-box;
+            margin-bottom: 8px;
+            outline: none;
+        }
+
+        #search-input:focus {
+            border-color: #aaa;
+        }
+
+        #history-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        #history-list li {
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        #history-list li:hover {
+            background: #f0f0f0;
+        }
+
+        #history-list li.active {
+            background: #e8f0fe;
+        }
+
+        .file-row {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .file-name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .remove-btn {
+            font-size: 13px;
+            color: #bbb;
+            cursor: pointer;
+            flex-shrink: 0;
+            background: none;
+            border: none;
+            padding: 0 4px;
+            line-height: 1;
+        }
+
+        .remove-btn:hover {
+            color: #e00;
+        }
+
+        .file-details {
+            font-size: 11px;
+            color: #999;
+            display: flex;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .empty-state {
+            color: #aaa;
+            font-size: 13px;
+            text-align: center;
+            padding: 20px 0;
         }
 
         #pdf-wrapper {
             position: absolute;
-            top: 60px;
+            top: 45px;
             bottom: 0;
             left: 0;
             right: 0;
-            overflow-x: auto;
-            overflow-y: hidden;
-            white-space: nowrap;
+            overflow: auto;
             padding: 20px;
+            transition: left 0.2s ease;
+        }
+
+        #pdf-wrapper.shifted {
+            left: 280px;
+        }
+
+        #pdf-grid {
+            display: grid;
+            gap: 20px;
+            justify-content: start;
+            align-items: start;
         }
 
         canvas {
-            display: inline-block;
-            margin-right: 20px;
             background: white;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
@@ -47,35 +206,325 @@
 <body>
 
     <div id="controls">
-        <input type="file" id="file-input" accept="application/pdf">
-        Zoom:
+        <button id="toggle-history" title="Toggle history panel">&#9776;</button>
+        <input type="file" id="file-input" accept="application/pdf" multiple>
+        <span>Zoom:</span>
         <input type="range" id="zoom" min="0.5" max="3" step="0.1" value="1">
     </div>
 
-    <div id="pdf-wrapper"></div>
+    <div id="sidebar">
+        <div id="sidebar-header">
+            <h3>History</h3>
+            <button id="clear-history" title="Clear all history">Clear all</button>
+        </div>
+        <input type="text" id="search-input" placeholder="Search files...">
+        <ul id="history-list"></ul>
+    </div>
+
+    <div id="pdf-wrapper">
+        <div id="pdf-grid"></div>
+    </div>
 
     <script>
         const fileInput = document.getElementById('file-input');
         const wrapper = document.getElementById('pdf-wrapper');
+        const grid = document.getElementById('pdf-grid');
         const zoomSlider = document.getElementById('zoom');
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('toggle-history');
+        const historyList = document.getElementById('history-list');
+        const clearBtn = document.getElementById('clear-history');
+        const searchInput = document.getElementById('search-input');
 
         let pdfDoc = null;
         let currentZoom = 1;
+        let currentFileId = null;
+        let renderId = 0;
 
         pdfjsLib.GlobalWorkerOptions.workerSrc =
             'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-        fileInput.addEventListener('change', async (e) => {
-            const file = e.target.files[0];
+        // --- SHA-256 helper ---
+        async function sha256(arrayBuffer) {
+            const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        // --- IndexedDB helpers ---
+        const DB_NAME = 'pdf-viewer-history';
+        const DB_VERSION = 2;
+        const STORE_NAME = 'files';
+
+        function openDB() {
+            return new Promise((resolve, reject) => {
+                const req = indexedDB.open(DB_NAME, DB_VERSION);
+                req.onupgradeneeded = (e) => {
+                    const db = req.result;
+                    if (e.oldVersion < 1) {
+                        db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+                    }
+                    if (e.oldVersion < 2) {
+                        // Migration: clear old store since IDs changed to sha256
+                        const tx = req.transaction;
+                        tx.objectStore(STORE_NAME).clear();
+                    }
+                };
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => reject(req.error);
+            });
+        }
+
+        async function saveFile(id, name, size, pageCount, arrayBuffer) {
+            const db = await openDB();
+            // Check if record already exists to preserve addedAt
+            const existing = await new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, 'readonly');
+                const req = tx.objectStore(STORE_NAME).get(id);
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => reject(req.error);
+            });
+
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, 'readwrite');
+                tx.objectStore(STORE_NAME).put({
+                    id,
+                    name,
+                    size,
+                    pageCount,
+                    data: arrayBuffer,
+                    addedAt: existing ? existing.addedAt : Date.now(),
+                    openedAt: Date.now()
+                });
+                tx.oncomplete = () => resolve();
+                tx.onerror = () => reject(tx.error);
+            });
+        }
+
+        async function getFile(id) {
+            const db = await openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, 'readonly');
+                const req = tx.objectStore(STORE_NAME).get(id);
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => reject(req.error);
+            });
+        }
+
+        async function getAllFiles() {
+            const db = await openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, 'readonly');
+                const req = tx.objectStore(STORE_NAME).getAll();
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => reject(req.error);
+            });
+        }
+
+        async function removeFile(id) {
+            const db = await openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, 'readwrite');
+                tx.objectStore(STORE_NAME).delete(id);
+                tx.oncomplete = () => resolve();
+                tx.onerror = () => reject(tx.error);
+            });
+        }
+
+        async function clearAllFiles() {
+            const db = await openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, 'readwrite');
+                tx.objectStore(STORE_NAME).clear();
+                tx.oncomplete = () => resolve();
+                tx.onerror = () => reject(tx.error);
+            });
+        }
+
+        // --- Sidebar helpers ---
+        function openSidebar() {
+            sidebar.classList.add('open');
+            wrapper.classList.add('shifted');
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            wrapper.classList.remove('shifted');
+        }
+
+        function isSidebarOpen() {
+            return sidebar.classList.contains('open');
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            if (isSidebarOpen()) closeSidebar();
+            else openSidebar();
+        });
+
+        // --- Clear all history ---
+        clearBtn.addEventListener('click', async () => {
+            await clearAllFiles();
+            currentFileId = null;
+            pdfDoc = null;
+            grid.innerHTML = '';
+            searchInput.value = '';
+            renderHistory();
+        });
+
+        // --- Search ---
+        searchInput.addEventListener('input', () => {
+            renderHistory();
+        });
+
+        // --- Format helpers ---
+        function formatSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        function formatDate(ts) {
+            const d = new Date(ts);
+            const now = new Date();
+            const isToday = d.toDateString() === now.toDateString();
+            if (isToday) {
+                return 'Today ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            }
+            return d.toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+
+        // --- Render history list ---
+        async function renderHistory() {
+            const files = await getAllFiles();
+            files.sort((a, b) => b.openedAt - a.openedAt);
+
+            const query = searchInput.value.trim().toLowerCase();
+            const filtered = query
+                ? files.filter(f => f.name.toLowerCase().includes(query))
+                : files;
+
+            historyList.innerHTML = '';
+
+            if (filtered.length === 0) {
+                const msg = query ? 'No matches' : 'No files yet';
+                historyList.innerHTML = '<li class="empty-state">' + msg + '</li>';
+                return;
+            }
+
+            for (const file of filtered) {
+                const li = document.createElement('li');
+                if (file.id === currentFileId) li.classList.add('active');
+
+                // Top row: name + remove button
+                const row = document.createElement('div');
+                row.className = 'file-row';
+
+                const nameSpan = document.createElement('span');
+                nameSpan.className = 'file-name';
+                nameSpan.textContent = file.name;
+                nameSpan.title = file.name;
+
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'remove-btn';
+                removeBtn.textContent = '\u00d7';
+                removeBtn.title = 'Remove from history';
+                removeBtn.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    await removeFile(file.id);
+                    if (file.id === currentFileId) {
+                        currentFileId = null;
+                        pdfDoc = null;
+                        grid.innerHTML = '';
+                        openSidebar();
+                    }
+                    renderHistory();
+                });
+
+                row.appendChild(nameSpan);
+                row.appendChild(removeBtn);
+
+                // Bottom row: metadata
+                const details = document.createElement('div');
+                details.className = 'file-details';
+
+                const sizeSpan = document.createElement('span');
+                sizeSpan.textContent = formatSize(file.size);
+
+                const pagesSpan = document.createElement('span');
+                pagesSpan.textContent = (file.pageCount || '?') + ' pg';
+
+                const dateSpan = document.createElement('span');
+                dateSpan.textContent = formatDate(file.addedAt || file.openedAt);
+
+                details.appendChild(sizeSpan);
+                details.appendChild(pagesSpan);
+                details.appendChild(dateSpan);
+
+                li.appendChild(row);
+                li.appendChild(details);
+
+                li.addEventListener('click', () => loadFromHistory(file.id));
+                historyList.appendChild(li);
+            }
+        }
+
+        // --- Load PDF from history ---
+        async function loadFromHistory(id) {
+            const file = await getFile(id);
             if (!file) return;
 
-            const reader = new FileReader();
-            reader.onload = async function () {
-                const typedarray = new Uint8Array(this.result);
-                pdfDoc = await pdfjsLib.getDocument(typedarray).promise;
-                renderAllPages();
-            };
-            reader.readAsArrayBuffer(file);
+            // Clone before pdf.js detaches the original
+            const stored = file.data.slice(0);
+
+            const typedarray = new Uint8Array(file.data);
+            pdfDoc = await pdfjsLib.getDocument(typedarray).promise;
+            currentFileId = file.id;
+
+            // Update openedAt + ensure pageCount is stored
+            await saveFile(file.id, file.name, file.size, pdfDoc.numPages, stored);
+
+            renderAllPages();
+            renderHistory();
+        }
+
+        // --- Read a single file as ArrayBuffer (promisified) ---
+        function readFileAsArrayBuffer(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = () => reject(reader.error);
+                reader.readAsArrayBuffer(file);
+            });
+        }
+
+        // --- File input handler (multiple files) ---
+        fileInput.addEventListener('change', async (e) => {
+            const files = Array.from(e.target.files);
+            if (files.length === 0) return;
+
+            let lastId = null;
+            for (const file of files) {
+                const arrayBuffer = await readFileAsArrayBuffer(file);
+                const id = await sha256(arrayBuffer);
+
+                // Clone before pdf.js detaches the original
+                const stored = arrayBuffer.slice(0);
+
+                const typedarray = new Uint8Array(arrayBuffer);
+                const doc = await pdfjsLib.getDocument(typedarray).promise;
+
+                await saveFile(id, file.name, file.size, doc.numPages, stored);
+
+                lastId = id;
+                pdfDoc = doc;
+            }
+
+            currentFileId = lastId;
+            renderAllPages();
+            renderHistory();
+
+            // Reset input so the same files can be re-selected
+            fileInput.value = '';
         });
 
         zoomSlider.addEventListener('input', () => {
@@ -83,12 +532,35 @@
             if (pdfDoc) renderAllPages();
         });
 
+        wrapper.addEventListener('wheel', (e) => {
+            if (!e.metaKey) return;
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? -0.1 : 0.1;
+            currentZoom = Math.min(3, Math.max(0.5, currentZoom + delta));
+            zoomSlider.value = currentZoom;
+            if (pdfDoc) renderAllPages();
+        }, { passive: false });
+
+        function computeColumns(pageWidth) {
+            const gap = 20;
+            const padding = 40; // wrapper padding (20 each side)
+            const sidebarWidth = isSidebarOpen() ? 280 : 0;
+            const available = window.innerWidth - sidebarWidth - padding;
+            const cols = Math.max(1, Math.min(4, Math.floor((available + gap) / (pageWidth + gap))));
+            return cols;
+        }
+
         async function renderAllPages() {
-            wrapper.innerHTML = '';
+            const thisRender = ++renderId;
+            const canvases = [];
 
             for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
+                if (thisRender !== renderId) return;
+
                 const page = await pdfDoc.getPage(pageNum);
-                const viewport = page.getViewport({scale: currentZoom});
+                if (thisRender !== renderId) return;
+
+                const viewport = page.getViewport({ scale: currentZoom });
 
                 const canvas = document.createElement('canvas');
                 const context = canvas.getContext('2d');
@@ -101,9 +573,31 @@
                     viewport: viewport
                 }).promise;
 
-                wrapper.appendChild(canvas);
+                if (thisRender !== renderId) return;
+
+                canvases.push(canvas);
+            }
+
+            // Swap in all at once to avoid flash
+            if (thisRender !== renderId) return;
+
+            // Compute columns from the first page's rendered width
+            const cols = canvases.length > 0 ? computeColumns(canvases[0].width) : 4;
+            grid.style.gridTemplateColumns = `repeat(${cols}, auto)`;
+
+            grid.innerHTML = '';
+            for (const c of canvases) grid.appendChild(c);
+        }
+
+        // --- Init: open sidebar if nothing is loaded ---
+        async function init() {
+            await renderHistory();
+            if (!pdfDoc) {
+                openSidebar();
             }
         }
+
+        init();
     </script>
 
 </body>
