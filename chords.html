@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guitar Chord Trainer</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #1a1a2e;
+      color: #e0e0e0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      width: 100%;
+      padding: 20px;
+      text-align: center;
+      background: #16213e;
+      border-bottom: 2px solid #0f3460;
+    }
+
+    header h1 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #e94560;
+      margin-bottom: 12px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .mode-toggle {
+      display: flex;
+      background: #0f3460;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .mode-toggle button {
+      padding: 8px 16px;
+      border: none;
+      background: transparent;
+      color: #999;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+
+    .mode-toggle button.active {
+      background: #e94560;
+      color: #fff;
+    }
+
+    .score {
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    .score span { color: #e94560; font-weight: 700; }
+
+    .btn {
+      padding: 8px 18px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.15s;
+    }
+
+    .btn-primary { background: #e94560; color: #fff; }
+    .btn-primary:hover { background: #c73652; }
+    .btn-secondary { background: #0f3460; color: #ccc; }
+    .btn-secondary:hover { background: #1a4a8a; }
+
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 1100px;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .prompt {
+      font-size: 1.6rem;
+      font-weight: 700;
+      text-align: center;
+      min-height: 2.4rem;
+    }
+
+    .prompt .chord-name {
+      color: #e94560;
+    }
+
+    #fretboard-container {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    #fretboard {
+      display: block;
+      margin: 0 auto;
+    }
+
+    .answer-section {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    #answer-input,
+    #lookup-input {
+      padding: 10px 16px;
+      border: 2px solid #0f3460;
+      border-radius: 6px;
+      background: #16213e;
+      color: #fff;
+      font-size: 1rem;
+      width: 220px;
+      outline: none;
+    }
+
+    #answer-input:focus,
+    #lookup-input:focus { border-color: #e94560; }
+
+    .feedback {
+      font-size: 1.1rem;
+      font-weight: 600;
+      min-height: 1.6rem;
+      text-align: center;
+    }
+
+    .feedback.correct { color: #4ecca3; }
+    .feedback.wrong { color: #e94560; }
+
+    .hint {
+      font-size: 0.85rem;
+      color: #666;
+      text-align: center;
+    }
+
+    .hint-choices {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 4px;
+    }
+
+    .hint-choices button {
+      padding: 6px 14px;
+      border: 1px solid #0f3460;
+      border-radius: 6px;
+      background: #16213e;
+      color: #ccc;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.15s;
+    }
+
+    .hint-choices button:hover {
+      border-color: #e94560;
+      color: #e94560;
+    }
+
+    /* History panel */
+    .history-panel {
+      width: 100%;
+      max-width: 1100px;
+      padding: 0 16px 24px;
+    }
+
+    .history-panel h2 {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .history-item {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 4px;
+      background: #16213e;
+      font-size: 0.85rem;
+    }
+
+    .history-item .h-num {
+      color: #555;
+      min-width: 24px;
+    }
+
+    .history-item .h-chord {
+      color: #e94560;
+      font-weight: 600;
+      min-width: 90px;
+    }
+
+    .history-item .h-answer {
+      color: #aaa;
+      flex: 1;
+    }
+
+    .history-item .h-result {
+      font-weight: 600;
+    }
+
+    .history-item .h-result.correct { color: #4ecca3; }
+    .history-item .h-result.wrong { color: #e94560; }
+    .history-item .h-result.skipped { color: #666; }
+
+    /* Lookup section */
+    #lookup-section {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #lookup-section .autocomplete-wrapper { display: inline-block; }
+
+    /* Autocomplete dropdown */
+    .autocomplete-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .autocomplete-list {
+      position: absolute;
+      bottom: 100%;
+      left: 0;
+      right: 0;
+      background: #16213e;
+      border: 1px solid #0f3460;
+      border-radius: 6px;
+      max-height: 200px;
+      overflow-y: auto;
+      display: none;
+      z-index: 10;
+      margin-bottom: 4px;
+    }
+
+    .autocomplete-list.show { display: block; }
+
+    .autocomplete-item {
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .autocomplete-item:hover,
+    .autocomplete-item.selected {
+      background: #0f3460;
+      color: #e94560;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Guitar Chord Trainer</h1>
+  <div class="controls">
+    <div class="mode-toggle">
+      <button id="mode-name" class="active" onclick="setMode('name')">Name That Chord</button>
+      <button id="mode-find" onclick="setMode('find')">Find That Chord</button>
+      <button id="mode-lookup" onclick="setMode('lookup')">Lookup</button>
+    </div>
+    <div class="score">Score: <span id="score">0</span> / <span id="total">0</span></div>
+    <button class="btn btn-secondary" id="hint-btn" onclick="showHint()">Hint</button>
+    <button class="btn btn-secondary" onclick="skip()">Skip</button>
+    <button class="btn btn-secondary" onclick="resetScore()">Reset</button>
+  </div>
+</header>
+
+<main>
+  <div class="prompt" id="prompt"></div>
+  <div id="fretboard-container">
+    <svg id="fretboard"></svg>
+  </div>
+  <div class="answer-section" id="answer-section">
+    <div class="autocomplete-wrapper">
+      <div class="autocomplete-list" id="autocomplete-list"></div>
+      <input type="text" id="answer-input" placeholder="Type chord name..." autocomplete="off">
+    </div>
+    <button class="btn btn-primary" onclick="submitAnswer()">Check</button>
+  </div>
+  <div class="feedback" id="feedback"></div>
+  <div class="hint" id="hint"></div>
+  <div class="hint-choices" id="hint-choices"></div>
+  <div id="lookup-section">
+    <div class="autocomplete-wrapper">
+      <div class="autocomplete-list" id="lookup-autocomplete-list"></div>
+      <input type="text" id="lookup-input" placeholder="Type a chord name..." autocomplete="off">
+    </div>
+  </div>
+</main>
+
+<div class="history-panel" id="history-panel">
+  <h2>History</h2>
+  <div class="history-list" id="history-list"></div>
+</div>
+
+<script>
+// ─── Chord Database (from tombatossals/chords-db) ───────────────
+// Each voicing: [lowE, A, D, G, B, highE] — absolute fret numbers, -1 = muted, 0 = open
+const CHORD_DB = {
+  'C': [-1,3,2,0,1,0],
+  'Cm': [-1,3,1,0,1,3],
+  'Cdim': [-1,3,1,-1,1,2],
+  'Cdim7': [-1,-1,1,2,1,2],
+  'Csus2': [-1,3,0,0,1,3],
+  'Csus4': [-1,3,3,0,1,1],
+  'Caug': [-1,3,2,1,1,-1],
+  'C5': [8,10,-1,-1,-1,-1],
+  'C6': [-1,3,2,2,1,0],
+  'C7': [-1,3,2,3,1,0],
+  'C7b5': [-1,-1,2,3,1,2],
+  'Caug7': [-1,3,2,3,-1,4],
+  'C9': [0,3,2,0,3,0],
+  'Cmaj7': [3,3,2,0,0,0],
+  'Cmaj9': [-1,3,0,0,0,0],
+  'Cm6': [-1,3,1,2,1,3],
+  'Cm7': [8,-1,8,8,8,-1],
+  'Cm7b5': [-1,3,4,3,4,-1],
+  'Cm9': [-1,3,1,3,3,3],
+  'CmMaj7': [-1,3,1,0,0,-1],
+  'Cadd9': [-1,3,2,0,3,0],
+  'C#': [-1,4,3,1,2,1],
+  'C#m': [-1,4,2,1,2,-1],
+  'C#dim': [-1,4,2,-1,2,3],
+  'C#dim7': [-1,-1,2,3,2,3],
+  'C#sus2': [4,4,6,6,4,4],
+  'C#sus4': [-1,4,4,1,2,-1],
+  'C#aug': [-1,4,4,4,2,2],
+  'C#5': [9,11,-1,-1,-1,-1],
+  'C#6': [-1,4,3,3,2,-1],
+  'C#7': [-1,4,3,4,2,-1],
+  'C#7b5': [-1,4,3,0,0,1],
+  'C#aug7': [-1,4,3,2,0,1],
+  'C#9': [4,4,3,4,4,4],
+  'C#maj7': [-1,4,3,1,1,1],
+  'C#maj9': [-1,4,1,1,1,1],
+  'C#m6': [-1,4,2,3,2,4],
+  'C#m7': [9,-1,9,9,9,-1],
+  'C#m7b5': [-1,4,5,4,5,-1],
+  'C#m9': [-1,4,2,4,4,4],
+  'C#mMaj7': [-1,4,2,1,1,-1],
+  'C#add9': [-1,4,3,1,4,1],
+  'D': [-1,-1,0,2,3,2],
+  'Dm': [-1,-1,0,2,3,1],
+  'Ddim': [-1,-1,0,1,-1,1],
+  'Ddim7': [-1,-1,0,1,0,1],
+  'Dsus2': [-1,-1,0,2,3,0],
+  'Dsus4': [-1,-1,0,2,3,3],
+  'Daug': [-1,-1,0,3,3,2],
+  'D5': [10,12,-1,-1,-1,-1],
+  'D6': [-1,-1,0,2,0,2],
+  'D7': [-1,-1,0,2,1,2],
+  'D7b5': [-1,-1,0,1,1,2],
+  'Daug7': [-1,-1,0,3,1,2],
+  'D9': [5,5,4,5,5,5],
+  'Dmaj7': [-1,-1,0,2,2,2],
+  'Dmaj9': [-1,5,2,2,2,2],
+  'Dm6': [-1,-1,0,2,0,1],
+  'Dm7': [10,-1,10,10,10,-1],
+  'Dm7b5': [-1,-1,0,1,1,1],
+  'Dm9': [1,0,0,2,1,0],
+  'DmMaj7': [-1,-1,0,2,2,1],
+  'Dadd9': [-1,5,4,2,5,2],
+  'Eb': [-1,-1,1,3,4,3],
+  'Ebm': [-1,-1,1,3,4,2],
+  'Ebdim': [-1,-1,1,2,-1,2],
+  'Ebdim7': [-1,-1,1,2,1,2],
+  'Ebsus2': [1,1,1,3,4,1],
+  'Ebsus4': [-1,-1,1,3,4,4],
+  'Ebaug': [-1,-1,5,4,4,3],
+  'Eb5': [11,13,-1,-1,-1,-1],
+  'Eb6': [-1,-1,1,3,1,3],
+  'Eb7': [-1,-1,1,3,2,3],
+  'Eb7b5': [-1,-1,1,2,2,3],
+  'Ebaug7': [-1,-1,1,4,2,3],
+  'Eb9': [-1,-1,1,0,2,1],
+  'Ebmaj7': [-1,1,1,3,3,3],
+  'Ebmaj9': [-1,6,3,3,3,3],
+  'Ebm6': [-1,1,1,3,1,2],
+  'Ebm7': [11,-1,11,11,11,-1],
+  'Ebm7b5': [-1,-1,1,2,2,2],
+  'Ebm9': [-1,6,4,6,6,6],
+  'EbmMaj7': [-1,-1,1,3,3,2],
+  'Ebadd9': [-1,6,5,3,6,3],
+  'E': [0,2,2,1,0,0],
+  'Em': [0,2,2,0,0,0],
+  'Edim': [-1,-1,2,3,-1,3],
+  'Edim7': [0,1,2,0,2,0],
+  'Esus2': [2,2,2,4,5,2],
+  'Esus4': [0,2,2,2,0,0],
+  'Eaug': [0,3,2,1,1,0],
+  'E5': [12,14,-1,-1,-1,-1],
+  'E6': [0,2,2,1,2,0],
+  'E7': [0,2,0,1,0,0],
+  'E7b5': [0,1,0,1,3,0],
+  'Eaug7': [0,3,0,1,1,0],
+  'E9': [0,2,0,1,0,2],
+  'Emaj7': [0,2,1,1,0,0],
+  'Emaj9': [0,2,1,1,0,2],
+  'Em6': [0,2,2,0,2,0],
+  'Em7': [0,-1,0,0,0,-1],
+  'Em7b5': [0,1,2,3,3,3],
+  'Em9': [0,2,0,0,0,2],
+  'EmMaj7': [0,2,1,0,0,0],
+  'Eadd9': [0,2,2,1,0,2],
+  'F': [1,3,3,2,1,1],
+  'Fm': [1,3,3,1,1,1],
+  'Fdim': [-1,-1,3,4,-1,4],
+  'Fdim7': [1,-1,0,1,0,1],
+  'Fsus2': [1,3,3,-1,1,3],
+  'Fsus4': [1,3,3,3,1,1],
+  'Faug': [-1,-1,3,2,2,1],
+  'F5': [1,3,-1,-1,-1,-1],
+  'F6': [1,-1,3,2,3,1],
+  'F7': [1,3,1,2,1,1],
+  'F7b5': [1,0,1,2,0,1],
+  'Faug7': [1,0,1,2,2,-1],
+  'F9': [1,3,1,2,1,3],
+  'Fmaj7': [-1,-1,3,2,1,0],
+  'Fmaj9': [1,0,2,0,1,0],
+  'Fm6': [1,-1,0,1,1,1],
+  'Fm7': [1,-1,1,1,1,-1],
+  'Fm7b5': [1,-1,1,1,0,-1],
+  'Fm9': [1,3,1,1,1,3],
+  'FmMaj7': [1,3,2,1,1,1],
+  'Fadd9': [-1,-1,3,2,1,3],
+  'F#': [2,4,4,3,2,2],
+  'F#m': [2,4,4,2,2,2],
+  'F#dim': [2,0,-1,2,1,-1],
+  'F#dim7': [2,-1,1,2,1,-1],
+  'F#sus2': [2,-1,-1,1,2,2],
+  'F#sus4': [2,4,4,4,2,2],
+  'F#aug': [-1,-1,4,3,3,2],
+  'F#5': [2,4,-1,-1,-1,-1],
+  'F#6': [2,-1,1,3,2,-1],
+  'F#7': [2,4,2,3,2,2],
+  'F#7b5': [2,-1,2,3,1,-1],
+  'F#aug7': [2,-1,2,3,3,-1],
+  'F#9': [2,4,2,3,2,4],
+  'F#maj7': [2,4,3,3,2,2],
+  'F#maj9': [2,1,3,1,2,1],
+  'F#m6': [2,-1,1,2,2,2],
+  'F#m7': [2,-1,2,2,2,-1],
+  'F#m7b5': [2,0,2,2,1,0],
+  'F#m9': [2,0,2,1,2,0],
+  'F#mMaj7': [2,4,3,2,2,2],
+  'F#add9': [2,1,-1,1,2,2],
+  'G': [3,2,0,0,0,3],
+  'Gm': [3,1,0,0,3,3],
+  'Gdim': [3,1,-1,3,2,-1],
+  'Gdim7': [3,1,-1,3,2,0],
+  'Gsus2': [3,0,0,0,3,3],
+  'Gsus4': [3,3,0,0,1,3],
+  'Gaug': [3,2,1,0,0,-1],
+  'G5': [3,5,-1,-1,-1,-1],
+  'G6': [3,2,0,0,0,0],
+  'G7': [3,2,0,0,0,1],
+  'G7b5': [3,-1,3,4,2,-1],
+  'Gaug7': [3,2,1,0,0,1],
+  'G9': [3,0,0,0,0,1],
+  'Gmaj7': [3,2,0,0,0,2],
+  'Gmaj9': [3,0,0,0,0,2],
+  'Gm6': [3,-1,2,3,3,3],
+  'Gm7': [3,-1,3,3,3,-1],
+  'Gm7b5': [3,-1,-1,3,2,1],
+  'Gm9': [3,0,0,3,3,1],
+  'GmMaj7': [3,1,0,0,3,2],
+  'Gadd9': [3,0,0,2,0,3],
+  'Ab': [4,3,1,1,1,-1],
+  'Abm': [4,6,6,4,4,4],
+  'Abdim': [4,2,-1,4,3,-1],
+  'Abdim7': [-1,-1,0,1,0,1],
+  'Absus2': [4,-1,-1,3,4,4],
+  'Absus4': [-1,-1,1,1,2,4],
+  'Abaug': [4,3,2,1,1,-1],
+  'Ab5': [4,6,-1,-1,-1,-1],
+  'Ab6': [-1,3,1,1,1,1],
+  'Ab7': [-1,-1,1,1,1,2],
+  'Ab7b5': [4,-1,4,5,3,-1],
+  'Abaug7': [4,-1,4,5,5,0],
+  'Ab9': [4,3,4,3,4,-1],
+  'Abmaj7': [4,6,5,5,4,4],
+  'Abmaj9': [-1,1,1,1,1,3],
+  'Abm6': [4,-1,3,4,4,-1],
+  'Abm7': [4,-1,4,4,4,-1],
+  'Abm7b5': [-1,-1,0,1,0,2],
+  'Abm9': [4,1,1,1,0,2],
+  'AbmMaj7': [-1,2,1,1,4,3],
+  'Abadd9': [4,3,-1,3,4,-1],
+  'A': [-1,0,2,2,2,0],
+  'Am': [-1,0,2,2,1,0],
+  'Adim': [-1,0,1,2,1,-1],
+  'Adim7': [-1,0,1,2,1,2],
+  'Asus2': [-1,0,2,2,0,0],
+  'Asus4': [-1,0,2,2,3,0],
+  'Aaug': [-1,0,3,2,2,1],
+  'A5': [5,7,-1,-1,-1,-1],
+  'A6': [-1,0,2,2,2,2],
+  'A7': [-1,0,2,0,2,0],
+  'A7b5': [-1,0,1,2,2,3],
+  'Aaug7': [-1,0,3,0,2,1],
+  'A9': [5,4,2,0,0,0],
+  'Amaj7': [-1,0,2,1,2,0],
+  'Amaj9': [-1,0,2,4,2,4],
+  'Am6': [-1,0,2,2,1,2],
+  'Am7': [-1,0,2,0,1,0],
+  'Am7b5': [-1,0,1,0,1,-1],
+  'Am9': [-1,0,2,4,1,3],
+  'AmMaj7': [-1,0,2,1,1,0],
+  'Aadd9': [-1,0,2,4,2,0],
+  'Bb': [-1,1,3,3,3,1],
+  'Bbm': [-1,1,3,3,2,1],
+  'Bbdim': [-1,1,2,3,2,-1],
+  'Bbdim7': [-1,1,2,0,2,0],
+  'Bbsus2': [1,1,3,3,1,1],
+  'Bbsus4': [-1,1,3,3,4,1],
+  'Bbaug': [-1,1,4,3,3,-1],
+  'Bb5': [6,8,-1,-1,-1,-1],
+  'Bb6': [-1,1,3,3,3,3],
+  'Bb7': [-1,1,3,1,3,1],
+  'Bb7b5': [-1,1,2,1,3,-1],
+  'Bbaug7': [-1,1,4,1,3,2],
+  'Bb9': [-1,1,0,1,1,1],
+  'Bbmaj7': [-1,1,3,2,3,1],
+  'Bbmaj9': [1,1,0,2,1,-1],
+  'Bbm6': [-1,1,3,-1,2,3],
+  'Bbm7': [5,-1,5,5,5,-1],
+  'Bbm7b5': [-1,1,2,1,2,-1],
+  'Bbm9': [-1,-1,3,5,2,4],
+  'BbmMaj7': [-1,1,3,2,2,1],
+  'Bbadd9': [-1,1,0,3,1,1],
+  'B': [2,2,4,4,4,2],
+  'Bm': [2,2,4,4,3,2],
+  'Bdim': [-1,2,0,-1,0,1],
+  'Bdim7': [-1,2,3,1,3,1],
+  'Bsus2': [2,2,4,4,2,2],
+  'Bsus4': [2,2,4,4,5,2],
+  'Baug': [-1,2,1,0,0,-1],
+  'B5': [7,9,-1,-1,-1,-1],
+  'B6': [-1,2,1,1,0,-1],
+  'B7': [-1,2,1,2,0,2],
+  'B7/A': [-1,4,4,4,-1,5],
+  'B7b5': [-1,2,1,2,0,1],
+  'Baug7': [-1,2,1,2,0,3],
+  'B9': [-1,2,1,2,2,2],
+  'Bmaj7': [2,2,4,3,4,2],
+  'Bmaj9': [2,2,1,3,2,-1],
+  'Bm6': [2,2,0,1,0,2],
+  'Bm7': [7,-1,7,7,7,-1],
+  'Bm7b5': [-1,2,3,2,3,-1],
+  'Bm9': [-1,2,0,2,2,2],
+  'BmMaj7': [-1,2,0,3,0,2],
+  'Badd9': [-1,2,1,-1,2,2],
+};
+
+// ─── State ──────────────────────────────────────────────────────
+let mode = 'name'; // 'name' or 'find'
+let currentChord = null;
+let currentVoicing = null;
+let score = 0;
+let total = 0;
+let answered = false;
+let hintUsed = false;
+let userPlacement = [-1, -1, -1, -1, -1, -1]; // for find mode
+let history = []; // { chord, answer, result: 'correct'|'wrong'|'skipped' }
+
+const STRING_NAMES = ['e', 'B', 'G', 'D', 'A', 'E']; // top to bottom visually (high to low)
+const FRET_MARKERS = [3, 5, 7, 9, 12, 15, 17, 19, 21];
+const DOUBLE_MARKERS = [12];
+const TOTAL_FRETS = 15;
+
+// ─── SVG Fretboard Rendering ────────────────────────────────────
+const FB = {
+  padLeft: 50,
+  padTop: 40,
+  padRight: 20,
+  padBottom: 30,
+  stringSpacing: 30,
+  fretSpacing: 60,
+  dotRadius: 10,
+};
+
+function getFretboardWidth() {
+  return FB.padLeft + TOTAL_FRETS * FB.fretSpacing + FB.padRight;
+}
+
+function getFretboardHeight() {
+  return FB.padTop + 5 * FB.stringSpacing + FB.padBottom;
+}
+
+function svgEl(tag, attrs = {}) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+  return el;
+}
+
+function drawFretboard(voicing, options = {}) {
+  const svg = document.getElementById('fretboard');
+  svg.innerHTML = '';
+  const w = getFretboardWidth();
+  const h = getFretboardHeight();
+  svg.setAttribute('width', w);
+  svg.setAttribute('height', h);
+  svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+
+  const { interactive = false, showDots = true, highlightRange = true } = options;
+
+  // Determine fret range to highlight
+  let minFret = 99, maxFret = 0;
+  if (voicing && highlightRange) {
+    for (const f of voicing) {
+      if (f > 0) { minFret = Math.min(minFret, f); maxFret = Math.max(maxFret, f); }
+    }
+    if (minFret === 99) { minFret = 0; maxFret = 3; }
+    minFret = Math.max(0, minFret - 1);
+    maxFret = Math.min(TOTAL_FRETS, maxFret + 1);
+  }
+
+  // Background
+  svg.appendChild(svgEl('rect', { x: 0, y: 0, width: w, height: h, fill: '#1a1a2e' }));
+
+  // Fretboard wood
+  const fbX = FB.padLeft;
+  const fbY = FB.padTop;
+  const fbW = TOTAL_FRETS * FB.fretSpacing;
+  const fbH = 5 * FB.stringSpacing;
+  svg.appendChild(svgEl('rect', { x: fbX, y: fbY, width: fbW, height: fbH, fill: '#3d2b1f', rx: 4 }));
+
+  // Highlight zone
+  if (voicing && highlightRange && showDots) {
+    const hlX = FB.padLeft + minFret * FB.fretSpacing;
+    const hlW = (maxFret - minFret) * FB.fretSpacing;
+    svg.appendChild(svgEl('rect', { x: hlX, y: fbY, width: hlW, height: fbH, fill: 'rgba(233,69,96,0.06)', rx: 4 }));
+  }
+
+  // Nut
+  svg.appendChild(svgEl('rect', { x: FB.padLeft - 4, y: FB.padTop, width: 6, height: fbH, fill: '#f5f0e6', rx: 2 }));
+
+  // Fret wires
+  for (let f = 1; f <= TOTAL_FRETS; f++) {
+    const x = FB.padLeft + f * FB.fretSpacing;
+    svg.appendChild(svgEl('line', { x1: x, y1: FB.padTop, x2: x, y2: FB.padTop + fbH, stroke: '#888', 'stroke-width': 2 }));
+  }
+
+  // Fret numbers
+  for (let f = 1; f <= TOTAL_FRETS; f++) {
+    const x = FB.padLeft + (f - 0.5) * FB.fretSpacing;
+    const txt = svgEl('text', { x, y: FB.padTop - 10, fill: '#666', 'font-size': 11, 'text-anchor': 'middle', 'font-family': 'sans-serif' });
+    txt.textContent = f;
+    svg.appendChild(txt);
+  }
+
+  // Fret markers (inlays)
+  for (const f of FRET_MARKERS) {
+    if (f > TOTAL_FRETS) continue;
+    const cx = FB.padLeft + (f - 0.5) * FB.fretSpacing;
+    if (DOUBLE_MARKERS.includes(f)) {
+      svg.appendChild(svgEl('circle', { cx, cy: FB.padTop + 1.25 * FB.stringSpacing, r: 5, fill: '#5a4a3a' }));
+      svg.appendChild(svgEl('circle', { cx, cy: FB.padTop + 3.75 * FB.stringSpacing, r: 5, fill: '#5a4a3a' }));
+    } else {
+      svg.appendChild(svgEl('circle', { cx, cy: FB.padTop + 2.5 * FB.stringSpacing, r: 5, fill: '#5a4a3a' }));
+    }
+  }
+
+  // Strings
+  for (let s = 0; s < 6; s++) {
+    const y = FB.padTop + s * FB.stringSpacing;
+    const thickness = 1 + s * 0.3; // thicker towards bottom (low E)
+    svg.appendChild(svgEl('line', { x1: FB.padLeft, y1: y, x2: FB.padLeft + fbW, y2: y, stroke: '#c0b090', 'stroke-width': thickness }));
+
+    // String label
+    const label = svgEl('text', { x: FB.padLeft - 20, y: y + 4, fill: '#999', 'font-size': 13, 'text-anchor': 'middle', 'font-family': 'sans-serif', 'font-weight': 600 });
+    label.textContent = STRING_NAMES[s];
+    svg.appendChild(label);
+  }
+
+  // Interactive click zones for find mode
+  if (interactive) {
+    for (let s = 0; s < 6; s++) {
+      // Open string / mute zone
+      const openZone = svgEl('rect', {
+        x: FB.padLeft - 30, y: FB.padTop + s * FB.stringSpacing - 12,
+        width: 28, height: 24, fill: 'transparent', cursor: 'pointer',
+        'data-string': s, 'data-fret': 0,
+      });
+      openZone.addEventListener('click', () => togglePlacement(5 - s, 0));
+      svg.appendChild(openZone);
+
+      for (let f = 1; f <= TOTAL_FRETS; f++) {
+        const cx = FB.padLeft + (f - 0.5) * FB.fretSpacing;
+        const cy = FB.padTop + s * FB.stringSpacing;
+        const zone = svgEl('rect', {
+          x: cx - FB.fretSpacing / 2, y: cy - 12,
+          width: FB.fretSpacing, height: 24,
+          fill: 'transparent', cursor: 'pointer',
+          'data-string': s, 'data-fret': f,
+        });
+        zone.addEventListener('click', () => togglePlacement(5 - s, f));
+        svg.appendChild(zone);
+      }
+    }
+  }
+
+  // Draw dots for voicing
+  if (voicing && showDots) {
+    drawVoicingDots(svg, voicing, '#e94560');
+  }
+
+  // Draw user placement dots in find mode
+  if (interactive) {
+    drawVoicingDots(svg, userPlacement, '#4ecca3');
+  }
+}
+
+function drawVoicingDots(svg, voicing, color) {
+  for (let s = 0; s < 6; s++) {
+    const fret = voicing[5 - s]; // visual string 0 (top) = highE = array index 5
+    const y = FB.padTop + s * FB.stringSpacing;
+
+    if (fret === -1) {
+      // Muted: X
+      const x = FB.padLeft - 20;
+      const txt = svgEl('text', { x, y: y + 5, fill: color, 'font-size': 16, 'text-anchor': 'middle', 'font-family': 'sans-serif', 'font-weight': 700 });
+      txt.textContent = 'X';
+      svg.appendChild(txt);
+    } else if (fret === 0) {
+      // Open: O
+      const x = FB.padLeft - 20;
+      svg.appendChild(svgEl('circle', { cx: x, cy: y, r: 7, fill: 'none', stroke: color, 'stroke-width': 2 }));
+    } else {
+      // Fretted: filled dot
+      const cx = FB.padLeft + (fret - 0.5) * FB.fretSpacing;
+      svg.appendChild(svgEl('circle', { cx, cy: y, r: FB.dotRadius, fill: color }));
+      // Fret number inside dot
+      const label = svgEl('text', { x: cx, y: y + 4, fill: '#fff', 'font-size': 10, 'text-anchor': 'middle', 'font-family': 'sans-serif', 'font-weight': 700 });
+      label.textContent = fret;
+      svg.appendChild(label);
+    }
+  }
+}
+
+// ─── Find Mode Interaction ──────────────────────────────────────
+function togglePlacement(stringIdx, fret) {
+  if (answered) return;
+
+  if (fret === 0) {
+    // Cycle: muted → open → muted
+    if (userPlacement[stringIdx] === -1) {
+      userPlacement[stringIdx] = 0;
+    } else if (userPlacement[stringIdx] === 0) {
+      userPlacement[stringIdx] = -1;
+    } else {
+      userPlacement[stringIdx] = 0;
+    }
+  } else {
+    // Toggle fret on/off, or switch to new fret
+    if (userPlacement[stringIdx] === fret) {
+      userPlacement[stringIdx] = -1;
+    } else {
+      userPlacement[stringIdx] = fret;
+    }
+  }
+
+  drawFretboard(null, { interactive: true, showDots: false });
+}
+
+// ─── Hint System ────────────────────────────────────────────────
+function showHint() {
+  if (answered || hintUsed || !currentChord) return;
+  hintUsed = true;
+
+  const container = document.getElementById('hint-choices');
+  container.innerHTML = '';
+
+  const correct = currentChord.name;
+  const allNames = getAllChordNames().filter(n => n !== correct);
+
+  // Pick 5 random decoys
+  const decoys = [];
+  const shuffled = allNames.sort(() => Math.random() - 0.5);
+  for (let i = 0; i < 5 && i < shuffled.length; i++) {
+    decoys.push(shuffled[i]);
+  }
+
+  // Combine and shuffle
+  const choices = [correct, ...decoys].sort(() => Math.random() - 0.5);
+
+  choices.forEach(name => {
+    const btn = document.createElement('button');
+    btn.textContent = name;
+    btn.addEventListener('click', () => {
+      if (mode === 'name') {
+        document.getElementById('answer-input').value = name;
+      }
+      submitAnswer(name);
+    });
+    container.appendChild(btn);
+  });
+
+  document.getElementById('hint').textContent = 'Pick one:';
+  document.getElementById('hint-btn').disabled = true;
+}
+
+// ─── Game Logic ─────────────────────────────────────────────────
+function getAllChordNames() {
+  return Object.keys(CHORD_DB);
+}
+
+function pickRandomChord() {
+  const names = getAllChordNames();
+  const name = names[Math.floor(Math.random() * names.length)];
+  const voicing = CHORD_DB[name];
+  return { name, voicing };
+}
+
+function newRound() {
+  answered = false;
+  currentChord = pickRandomChord();
+  currentVoicing = currentChord.voicing;
+  userPlacement = [-1, -1, -1, -1, -1, -1];
+
+  const feedback = document.getElementById('feedback');
+  const hint = document.getElementById('hint');
+  feedback.textContent = '';
+  feedback.className = 'feedback';
+  hint.textContent = '';
+  hintUsed = false;
+  document.getElementById('hint-choices').innerHTML = '';
+  document.getElementById('hint-btn').disabled = false;
+
+  if (mode === 'name') {
+    document.getElementById('prompt').innerHTML = 'What chord is this?';
+    document.getElementById('answer-section').style.display = 'flex';
+    const input = document.getElementById('answer-input');
+    input.value = '';
+    input.disabled = false;
+    input.focus();
+    drawFretboard(currentVoicing, { interactive: false, showDots: true });
+    hint.textContent = 'Type the chord name (e.g. Am7, F#dim, Gsus4)';
+  } else {
+    document.getElementById('prompt').innerHTML = `Place the chord: <span class="chord-name">${currentChord.name}</span>`;
+    document.getElementById('answer-section').style.display = 'flex';
+    const input = document.getElementById('answer-input');
+    input.style.display = 'none';
+    drawFretboard(null, { interactive: true, showDots: false });
+    hint.textContent = 'Click frets to place fingers. Click left of nut to toggle open/muted. Press Check when done.';
+  }
+}
+
+function normalizeChordName(name) {
+  return name.trim()
+    .replace(/♯/g, '#')
+    .replace(/♭/g, 'b')
+    .replace(/\s+/g, '');
+}
+
+function submitAnswer(hintChoice) {
+  if (answered) { newRound(); return; }
+
+  const feedback = document.getElementById('feedback');
+  total++;
+
+  let isCorrect = false;
+  let userAnswer = '';
+
+  if (mode === 'name') {
+    const input = document.getElementById('answer-input');
+    const guess = hintChoice ? normalizeChordName(hintChoice) : normalizeChordName(input.value);
+    userAnswer = guess || '(empty)';
+    const correct = currentChord.name;
+
+    if (guess.toLowerCase() === correct.toLowerCase()) {
+      isCorrect = true;
+      score++;
+      feedback.textContent = 'Correct!';
+      feedback.className = 'feedback correct';
+    } else {
+      feedback.innerHTML = `Wrong! It was <strong>${correct}</strong>`;
+      feedback.className = 'feedback wrong';
+    }
+    input.disabled = true;
+  } else {
+    const correct = currentVoicing;
+    let match = true;
+    for (let i = 0; i < 6; i++) {
+      if (userPlacement[i] !== correct[i]) { match = false; break; }
+    }
+
+    userAnswer = userPlacement.map(f => f === -1 ? 'X' : f).join(' ');
+    if (match) {
+      isCorrect = true;
+      score++;
+      feedback.textContent = 'Correct!';
+      feedback.className = 'feedback correct';
+    } else {
+      feedback.textContent = 'Not quite! Showing the correct shape...';
+      feedback.className = 'feedback wrong';
+    }
+
+    drawFretboard(currentVoicing, { interactive: false, showDots: true });
+  }
+
+  addHistory(currentChord.name, userAnswer, isCorrect ? 'correct' : 'wrong');
+  answered = true;
+  updateScore();
+  document.getElementById('hint').textContent = 'Press Check or Enter for next chord';
+  document.getElementById('hint-choices').innerHTML = '';
+  document.getElementById('hint-btn').disabled = true;
+}
+
+function skip() {
+  if (!answered) {
+    addHistory(currentChord.name, '—', 'skipped');
+    total++;
+    updateScore();
+  }
+  newRound();
+}
+
+function resetScore() {
+  score = 0;
+  total = 0;
+  history = [];
+  updateScore();
+  renderHistory();
+  newRound();
+}
+
+function updateScore() {
+  document.getElementById('score').textContent = score;
+  document.getElementById('total').textContent = total;
+}
+
+// ─── History ────────────────────────────────────────────────────
+function addHistory(chord, answer, result) {
+  history.push({ chord, answer, result });
+  renderHistory();
+}
+
+function renderHistory() {
+  const list = document.getElementById('history-list');
+  list.innerHTML = '';
+  // Show newest first
+  for (let i = history.length - 1; i >= 0; i--) {
+    const h = history[i];
+    const row = document.createElement('div');
+    row.className = 'history-item';
+    row.innerHTML =
+      `<span class="h-num">${i + 1}</span>` +
+      `<span class="h-chord">${h.chord}</span>` +
+      `<span class="h-answer">${h.answer}</span>` +
+      `<span class="h-result ${h.result}">${h.result}</span>`;
+    list.appendChild(row);
+  }
+}
+
+// ─── Mode Switching ─────────────────────────────────────────────
+function setMode(m) {
+  mode = m;
+  document.getElementById('mode-name').classList.toggle('active', m === 'name');
+  document.getElementById('mode-find').classList.toggle('active', m === 'find');
+  document.getElementById('mode-lookup').classList.toggle('active', m === 'lookup');
+
+  const answerSection = document.getElementById('answer-section');
+  const lookupSection = document.getElementById('lookup-section');
+  const input = document.getElementById('answer-input');
+  const autocomplete = document.getElementById('autocomplete-list');
+  const prompt = document.getElementById('prompt');
+  const feedback = document.getElementById('feedback');
+  const hint = document.getElementById('hint');
+  const hintChoices = document.getElementById('hint-choices');
+  const hintBtn = document.getElementById('hint-btn');
+
+  // Reset common UI
+  feedback.textContent = '';
+  feedback.className = 'feedback';
+  hint.textContent = '';
+  hintChoices.innerHTML = '';
+  autocomplete.classList.remove('show');
+
+  if (m === 'lookup') {
+    answerSection.style.display = 'none';
+    lookupSection.style.display = 'flex';
+    hintBtn.style.display = 'none';
+    prompt.innerHTML = 'Look up any chord';
+    hint.textContent = 'Type a chord name to see it on the fretboard';
+    const lookupInput = document.getElementById('lookup-input');
+    lookupInput.value = '';
+    lookupInput.focus();
+    drawFretboard(null, { interactive: false, showDots: false });
+  } else {
+    lookupSection.style.display = 'none';
+    answerSection.style.display = 'flex';
+    hintBtn.style.display = '';
+    if (m === 'name') {
+      input.style.display = '';
+      input.placeholder = 'Type chord name...';
+    } else {
+      input.style.display = 'none';
+    }
+    newRound();
+  }
+}
+
+// ─── Lookup Mode ────────────────────────────────────────────────
+function setupLookupAutocomplete() {
+  const input = document.getElementById('lookup-input');
+  const list = document.getElementById('lookup-autocomplete-list');
+  const allNames = getAllChordNames();
+  let selectedIdx = -1;
+
+  function showChord(name) {
+    const voicing = CHORD_DB[name];
+    if (voicing) {
+      document.getElementById('prompt').innerHTML = `<span class="chord-name">${name}</span>`;
+      drawFretboard(voicing, { interactive: false, showDots: true });
+    }
+  }
+
+  input.addEventListener('input', () => {
+    const val = normalizeChordName(input.value);
+    list.innerHTML = '';
+    selectedIdx = -1;
+
+    if (!val) {
+      list.classList.remove('show');
+      document.getElementById('prompt').innerHTML = 'Look up any chord';
+      drawFretboard(null, { interactive: false, showDots: false });
+      return;
+    }
+
+    const matches = allNames.filter(n => n.toLowerCase().startsWith(val.toLowerCase())).slice(0, 8);
+
+    // Exact match — show immediately
+    const exact = allNames.find(n => n.toLowerCase() === val.toLowerCase());
+    if (exact) showChord(exact);
+
+    if (matches.length === 0) { list.classList.remove('show'); return; }
+
+    matches.forEach((m) => {
+      const item = document.createElement('div');
+      item.className = 'autocomplete-item';
+      item.textContent = m;
+      item.addEventListener('click', () => {
+        input.value = m;
+        list.classList.remove('show');
+        showChord(m);
+      });
+      list.appendChild(item);
+    });
+
+    list.classList.add('show');
+  });
+
+  input.addEventListener('keydown', (e) => {
+    const items = list.querySelectorAll('.autocomplete-item');
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      selectedIdx = Math.min(selectedIdx + 1, items.length - 1);
+      items.forEach((it, i) => it.classList.toggle('selected', i === selectedIdx));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      selectedIdx = Math.max(selectedIdx - 1, 0);
+      items.forEach((it, i) => it.classList.toggle('selected', i === selectedIdx));
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (selectedIdx >= 0 && items[selectedIdx]) {
+        const name = items[selectedIdx].textContent;
+        input.value = name;
+        list.classList.remove('show');
+        showChord(name);
+      }
+    } else if (e.key === 'Escape') {
+      list.classList.remove('show');
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#lookup-section')) list.classList.remove('show');
+  });
+}
+
+// ─── Autocomplete ───────────────────────────────────────────────
+function setupAutocomplete() {
+  const input = document.getElementById('answer-input');
+  const list = document.getElementById('autocomplete-list');
+  const allNames = getAllChordNames();
+  let selectedIdx = -1;
+
+  input.addEventListener('input', () => {
+    const val = normalizeChordName(input.value);
+    list.innerHTML = '';
+    selectedIdx = -1;
+
+    if (!val) { list.classList.remove('show'); return; }
+
+    const matches = allNames.filter(n => n.toLowerCase().startsWith(val.toLowerCase())).slice(0, 8);
+    if (matches.length === 0) { list.classList.remove('show'); return; }
+
+    matches.forEach((m, i) => {
+      const item = document.createElement('div');
+      item.className = 'autocomplete-item';
+      item.textContent = m;
+      item.addEventListener('click', () => {
+        input.value = m;
+        list.classList.remove('show');
+      });
+      list.appendChild(item);
+    });
+
+    list.classList.add('show');
+  });
+
+  input.addEventListener('keydown', (e) => {
+    const items = list.querySelectorAll('.autocomplete-item');
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      selectedIdx = Math.min(selectedIdx + 1, items.length - 1);
+      items.forEach((it, i) => it.classList.toggle('selected', i === selectedIdx));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      selectedIdx = Math.max(selectedIdx - 1, 0);
+      items.forEach((it, i) => it.classList.toggle('selected', i === selectedIdx));
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (selectedIdx >= 0 && items[selectedIdx]) {
+        input.value = items[selectedIdx].textContent;
+        list.classList.remove('show');
+      } else {
+        submitAnswer();
+      }
+    } else if (e.key === 'Escape') {
+      list.classList.remove('show');
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.autocomplete-wrapper')) list.classList.remove('show');
+  });
+}
+
+// ─── Keyboard shortcut ─────────────────────────────────────────
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && mode === 'find') {
+    submitAnswer();
+  }
+});
+
+// ─── Init ───────────────────────────────────────────────────────
+setupAutocomplete();
+setupLookupAutocomplete();
+newRound();
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(open:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(node -e:*)"
+    ]
+  }
+}
