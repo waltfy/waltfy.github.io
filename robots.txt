@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://waltfy.github.io/sitemap.xml

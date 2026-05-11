@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Compound Interest Calculator — Compare Multiple Scenarios Side-by-Side</title>
+<meta name="description" content="Free compound interest calculator. Compare multiple savings scenarios side-by-side on one chart, model regular contributions and withdrawals, set a starting age, and share results by link. No signup." />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta name="theme-color" content="#2563eb" />
+<meta name="author" content="Walt" />
+<link rel="canonical" href="https://waltfy.github.io/compound" />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Compound Interest Calculator" />
+<meta property="og:title" content="Compound Interest Calculator — Compare Multiple Scenarios" />
+<meta property="og:description" content="Compare multiple compound interest scenarios side-by-side. Regular contributions, custom currency, starting age, shareable URL." />
+<meta property="og:url" content="https://waltfy.github.io/compound" />
+<meta property="og:image" content="https://waltfy.github.io/compound-og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Compound Interest Calculator — Compare Multiple Scenarios" />
+<meta name="twitter:description" content="Compare multiple compound interest scenarios side-by-side. Regular contributions, custom currency, starting age, shareable URL." />
+<meta name="twitter:image" content="https://waltfy.github.io/compound-og.png" />
+
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="stylesheet" href="styles.css" />
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+<script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script defer src="app.js"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": "https://waltfy.github.io/compound#app",
+      "name": "Compound Interest Calculator",
+      "url": "https://waltfy.github.io/compound",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any (web browser)",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "description": "Free compound interest calculator with multi-scenario side-by-side comparison, contributions/withdrawals, custom currency, starting age, and shareable URLs.",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "featureList": [
+        "Compare multiple compound interest scenarios on one chart",
+        "Model regular contributions and withdrawals",
+        "Adjustable compounding frequency (daily, monthly, quarterly, annually)",
+        "Custom currency symbol or code",
+        "Optional starting age for retirement planning",
+        "Shareable URL — no signup required",
+        "Export year-by-year data as CSV"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://waltfy.github.io/compound#website",
+      "url": "https://waltfy.github.io/compound",
+      "name": "Compound Interest Calculator",
+      "inLanguage": "en"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://waltfy.github.io/compound" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is compound interest?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Compound interest is interest earned on both the original principal and on previously accumulated interest. Because each period's interest is added to the balance before the next period is calculated, the balance grows faster than it would under simple interest."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is compound interest calculated?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The standard formula is A = P (1 + r/n)^(n·t), where P is the principal, r is the annual interest rate (as a decimal), n is the number of compounding periods per year, and t is the number of years. When you add regular contributions, the future value is computed period by period."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between simple and compound interest?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Simple interest is calculated only on the original principal. Compound interest is calculated on the principal plus any previously earned interest, so the balance grows exponentially rather than linearly."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How often should interest compound?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "More frequent compounding produces slightly higher returns, but the difference narrows quickly. Monthly compounding is the most common assumption for savings accounts and is a good default for planning."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the Rule of 72?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The Rule of 72 is a shortcut for estimating how long it takes a sum to double. Divide 72 by the annual rate (in percent). At 6% a balance roughly doubles every 12 years; at 9%, every 8 years."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I model regular contributions or withdrawals?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Set a contribution amount and a frequency (monthly, quarterly, or yearly). A negative contribution acts as a withdrawal. Use ‘Stop after (yrs)’ to end contributions at a specific year."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does this calculator account for inflation or taxes?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Results are in nominal (pre-tax, pre-inflation) terms. To estimate real returns, subtract your expected inflation rate from the nominal rate before entering it."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my data saved or shared?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No data is uploaded anywhere. Inputs are encoded into the page URL so you can bookmark or share scenarios, but the calculation runs entirely in your browser."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<header>
+  <div class="header-title">
+    <h1>Compound Interest Calculator</h1>
+    <p class="tagline">Compare multiple savings scenarios side-by-side. Share by link. No signup.</p>
+  </div>
+  <div class="header-controls">
+    <a href="#learn" class="header-link">How it works</a>
+    <label class="inline">
+      Currency
+      <input type="text" id="currency" maxlength="3" />
+    </label>
+    <label class="inline">
+      Starting age
+      <input type="number" id="startAge" min="0" step="1" />
+    </label>
+    <button id="copyLink" class="btn">Copy shareable link</button>
+  </div>
+</header>
+
+<main>
+  <section id="seriesPanel" class="panel">
+    <div class="panel-header">
+      <h2>Series</h2>
+    </div>
+    <div class="tabs-wrap">
+      <div id="seriesTabs" class="series-tabs"></div>
+      <button id="addSeries" class="btn tab-add" title="Add series">+</button>
+    </div>
+    <div id="seriesEditor"></div>
+  </section>
+
+  <section class="panel chart-panel">
+    <h2>Projection</h2>
+    <div class="chart-wrap">
+      <canvas id="chart"></canvas>
+    </div>
+  </section>
+
+  <div class="ad-slot ad-leaderboard ad-fullwidth" data-ad-slot="mid-leaderboard" aria-label="Advertisement">
+    <span class="ad-placeholder">Advertisement &mdash; 728&times;90</span>
+  </div>
+
+  <section class="panel">
+    <div class="panel-header">
+      <h2>Year-by-year</h2>
+      <button id="copyCsv" class="btn">Copy CSV</button>
+    </div>
+    <div class="table-wrap">
+      <table id="dataTable"></table>
+    </div>
+  </section>
+
+  <article class="content panel-flat" aria-labelledby="learn">
+    <h2 id="examples-demo">Try a real example</h2>
+    <p>Each link below opens the calculator with a fully-loaded scenario. Edit the numbers from there, or copy the URL to share.</p>
+    <div id="exampleLinks" class="examples"></div>
+
+    <h2 id="learn">How to use this compound interest calculator</h2>
+    <p>Enter an <strong>initial deposit</strong>, an annual <strong>interest rate</strong>, the number of <strong>years</strong> to project, and (optionally) a recurring <strong>contribution</strong>. Pick a <strong>compounding frequency</strong> (monthly is the most common default for savings accounts). The chart and year-by-year table update live as you type. Click the <strong>+</strong> button next to the series tabs to add a second scenario — for example, "save £500/month at 7%" versus "save £750/month at 5%" — and compare them on the same chart.</p>
+
+    <h2 id="what-is">What is compound interest?</h2>
+    <p>Compound interest is interest earned on both the original deposit and on previously earned interest. Each compounding period, the balance grows; the next period's interest is calculated on that larger balance. Over long horizons, this produces the exponential growth curve you see in the chart above.</p>
+    <p>The standard formula for compound interest is:</p>
+    <p class="formula"><code>A = P (1 + r/n)<sup>n·t</sup></code></p>
+    <ul class="legend">
+      <li><strong>A</strong> — final balance (future value)</li>
+      <li><strong>P</strong> — principal (initial deposit)</li>
+      <li><strong>r</strong> — annual interest rate, as a decimal (e.g. 7% = 0.07)</li>
+      <li><strong>n</strong> — number of compounding periods per year</li>
+      <li><strong>t</strong> — number of years</li>
+    </ul>
+    <p>When you add regular contributions, the calculator works period-by-period: each month it adds the new interest, then (if a contribution is due) adds the contribution, before moving to the next month.</p>
+
+    <h2 id="examples">Worked examples</h2>
+
+    <h3>1. £10,000 lump sum for 30 years at 7%</h3>
+    <p>With monthly compounding and no further contributions, £10,000 grows to roughly £81,165 after 30 years. The growth is entirely driven by reinvested interest — the principal is unchanged but the balance has multiplied roughly eight-fold. <a class="worked-link" data-worked="lump" href="#">Open this scenario →</a></p>
+
+    <h3>2. £500/month for 30 years at 7%</h3>
+    <p>Saving £500 a month at 7% (monthly compounding) reaches approximately £612,000 after 30 years. You will have contributed £180,000 of your own money; the remaining ~£432,000 is interest. This is the value of starting early. <a class="worked-link" data-worked="monthly" href="#">Open this scenario →</a></p>
+
+    <h3>3. The cost of waiting five years</h3>
+    <p>The same £500/month plan, delayed by five years (so you save for 25 years instead of 30) reaches roughly £406,000 — about £206,000 less. Use the <strong>Delay (yrs)</strong> field in the calculator to model this directly. <a class="worked-link" data-worked="wait5" href="#">Open this scenario →</a></p>
+
+    <h2 id="compare">Comparing scenarios side-by-side</h2>
+    <p>Most compound interest calculators show one scenario at a time. This one is built to compare. Add a series for each plan you want to consider — different rates, different monthly amounts, different time horizons — and they appear on the same chart with distinct colors. Toggle <em>Show on chart</em> to keep a series saved but hide it temporarily. When you find a comparison worth keeping, click <strong>Copy shareable link</strong>: the full state of the calculator is encoded into the URL.</p>
+
+    <h2 id="faq">Frequently asked questions</h2>
+
+    <h3>How is compound interest different from simple interest?</h3>
+    <p>Simple interest is calculated only on the original principal, so the balance grows linearly. Compound interest is calculated on the running balance, so the balance grows exponentially. Over long horizons the difference is enormous.</p>
+
+    <h3>How often should interest compound?</h3>
+    <p>More frequent compounding produces slightly higher returns, but the difference shrinks fast. Monthly compounding is the standard assumption for retail savings accounts and a good default for planning.</p>
+
+    <h3>What is the Rule of 72?</h3>
+    <p>A shortcut for estimating how long a balance takes to double: divide 72 by the annual rate (in percent). At 6% a balance doubles every ~12 years; at 9%, every ~8 years.</p>
+
+    <h3>Can I model withdrawals?</h3>
+    <p>Yes — enter a negative contribution. The calculator treats a negative contribution as a regular withdrawal at the chosen frequency.</p>
+
+    <h3>What does "Delay (yrs)" mean?</h3>
+    <p>It postpones the start of the plan. During the delay, nothing is invested. The initial deposit lands at the end of the delay and contributions begin from there. Use it to compare starting now versus starting later.</p>
+
+    <h3>Does this calculator account for inflation or taxes?</h3>
+    <p>No. Results are nominal (pre-tax, pre-inflation). To estimate <em>real</em> returns, subtract your expected inflation rate from the nominal rate before entering it. For tax-deferred accounts (ISA, 401k, IRA, Roth) the nominal figure is usually appropriate.</p>
+
+    <h3>Is my data saved or shared?</h3>
+    <p>No. The calculation runs entirely in your browser. Inputs are encoded into the page URL so you can bookmark or share scenarios, but nothing is sent to a server.</p>
+
+    <h3>How accurate is this calculator?</h3>
+    <p>Math is exact for the model. Real investments — index funds, savings accounts, bonds — will vary period-to-period; this tool assumes a steady annualized rate. Use it for planning, not as a forecast.</p>
+
+    <h2 id="further-reading">Further reading and videos</h2>
+    <p>External resources from authoritative sources on compound interest and long-term investing:</p>
+    <h3>Articles</h3>
+    <ul class="reading">
+      <li><a href="https://www.investopedia.com/terms/c/compoundinterest.asp" rel="noopener noreferrer external" target="_blank">Investopedia — Compound Interest</a> — definition, formula, and worked examples.</li>
+      <li><a href="https://www.investor.gov/financial-tools-calculators/calculators/compound-interest-calculator" rel="noopener noreferrer external" target="_blank">SEC Investor.gov — Compound Interest Calculator</a> — the U.S. SEC's own calculator with a short explainer.</li>
+      <li><a href="https://www.nerdwallet.com/article/banking/what-is-compound-interest" rel="noopener noreferrer external" target="_blank">NerdWallet — What is compound interest?</a> — beginner-friendly overview.</li>
+      <li><a href="https://www.bankrate.com/banking/savings/compound-interest/" rel="noopener noreferrer external" target="_blank">Bankrate — Compound Interest Explained</a> — examples and how-to.</li>
+    </ul>
+    <h3>Videos</h3>
+    <ul class="reading">
+      <li><a href="https://www.youtube.com/watch?v=Rm6UdfRs3gw" rel="noopener noreferrer external" target="_blank">YouTube — The power of compound interest</a> — short explainer on why starting early matters.</li>
+    </ul>
+    <p class="hint">Links open in new tabs. We're not affiliated with these sources.</p>
+  </article>
+
+  <div class="ad-slot ad-leaderboard ad-fullwidth" data-ad-slot="footer-leaderboard" aria-label="Advertisement">
+    <span class="ad-placeholder">Advertisement &mdash; 728&times;90</span>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <p>Created by Walter Carvalho — <a href="https://github.com/waltfy" rel="noopener noreferrer" target="_blank">github.com/waltfy</a></p>
+</footer>
+
+<template id="tabTemplate">
+  <button class="series-tab" data-id="">
+    <span class="color-dot"></span>
+    <span class="tab-name"></span>
+  </button>
+</template>
+
+<template id="editorTemplate">
+  <div class="series-editor" data-id="">
+    <div class="editor-head">
+      <input type="text" class="series-name" />
+      <label class="inline checkbox tight">
+        <input type="checkbox" class="series-enabled" />
+        Show on chart
+      </label>
+      <button class="btn icon delete-series" title="Delete series">×</button>
+    </div>
+    <div class="series-grid">
+      <label><span class="lbl-initial">Initial</span><input type="number" class="f-initial" step="100" /></label>
+      <label>Rate (% / yr)<input type="number" class="f-rate" step="0.1" /></label>
+      <label>Years<input type="number" class="f-years" step="1" min="1" /></label>
+      <label>Delay (yrs)<input type="number" class="f-delay" step="1" min="0" /></label>
+      <label>Compounding
+        <select class="f-compounding">
+          <option value="1">Annually</option>
+          <option value="2">Semi-annually</option>
+          <option value="4">Quarterly</option>
+          <option value="12">Monthly</option>
+          <option value="365">Daily</option>
+        </select>
+      </label>
+      <label><span class="lbl-contrib">Contribution</span><input type="number" class="f-contrib" step="50" /></label>
+      <label>Frequency
+        <select class="f-contribfreq">
+          <option value="12">Monthly</option>
+          <option value="4">Quarterly</option>
+          <option value="1">Yearly</option>
+        </select>
+      </label>
+      <label>Stop after (yrs)<input type="number" class="f-stopafter" step="1" min="0" placeholder="0 = never" /></label>
+      <label>Color<input type="color" class="f-color" /></label>
+    </div>
+    <p class="hint">Tip: negative contribution = withdrawal.</p>
+  </div>
+</template>
+</body>
+</html>
